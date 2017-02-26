@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/taxiServlet.iml" filepath="$PROJECT_DIR$/.idea/modules/taxiServlet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/taxiServlet_main.iml" filepath="$PROJECT_DIR$/.idea/modules/taxiServlet_main.iml" group="taxiServlet" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/taxiServlet_test.iml" filepath="$PROJECT_DIR$/.idea/modules/taxiServlet_test.iml" group="taxiServlet" />
+    </modules>
+  </component>
+</project>
