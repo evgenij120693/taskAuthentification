@@ -11,25 +11,30 @@
 <html>
 <%@include file="include/header.jsp" %>
 <body>
-<%
-    String error = (String) request.getAttribute("error");
-    if (error != null) {
-%>
-<div class="row medium-4 large-3 alert callout">
-    <%=error%>
-</div>
-<%}%>
+<link href="css/bootstrap/sign_in.css" rel="stylesheet">
 
+<div class="container">
 
-<div class="row medium-4 large-3 primary columns callout left">
-    <form action="/taxi/login" method="post">
-        <label>Логин:</label>
-        <input type="text" name="login" placeholder="Логин" value="">
-        <label>Пароль:</label>
-        <input type="password" name="password" placeholder="Пароль" value="">
-        <input type="submit" class="button" style="float: right;" value="Войти">
+    <form class="form-signin" action="/taxi/login" method="post">
+        <h2 class="form-signin-heading">Авторизуйтесь</h2>
+
+        <label for="inputEmail" class="sr-only">Логин</label>
+        <input type="text" name="login" id="inputEmail" class="form-control" placeholder="Логин" required="" autofocus="">
+        <label for="inputPassword"   class="sr-only">Пароль</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Пароль" required="">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+        <%
+            String error = (String) request.getAttribute("error");
+            if (error != null) {
+        %>
+        <div class="alert alert-danger " style="margin-top: 20px;">
+            <%=error%>
+        </div>
+        <%}%>
     </form>
 
+
 </div>
+
 </body>
 </html>

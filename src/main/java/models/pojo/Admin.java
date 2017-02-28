@@ -8,15 +8,35 @@ public class Admin {
     private String login;
     private String password;
     private String name;
+    private String email;
+    private int sendEmailFlag;
 
-    public Admin(int id, String login, String password, String name) {
+    public Admin(int id, String login, String password, String name, String email, int sendEmailFlag) {
         this.id = id;
         this.login = login;
         this.password = password;
         this.name = name;
+        this.email = email;
+        this.sendEmailFlag = sendEmailFlag;
     }
 
     public Admin() {
+    }
+
+    public int getSendEmailFlag() {
+        return sendEmailFlag;
+    }
+
+    public void setSendEmailFlag(int sendEmailFlag) {
+        this.sendEmailFlag = sendEmailFlag;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getId() {

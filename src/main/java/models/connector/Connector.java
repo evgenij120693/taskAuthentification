@@ -1,9 +1,14 @@
 package models.connector;
 
-import com.mysql.jdbc.Connection;
+
 import common.exception.ConnectorException;
 import org.apache.log4j.Logger;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -31,17 +36,23 @@ public class Connector {
      */
     public static Connection getConnection() throws ConnectorException {
         // if(connection == null) {
-
         try {
-            new Connector();
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new ConnectorException();
-        } catch (ClassNotFoundException e) {
+            Context initContext = null;
+            initContext = new InitialContext();
+            Context environmentContext = (Context) initContext.lookup("java:comp/env");
+            String dataResourceName = "jdbc/dbconnect";
+            DataSource ds = null;
+            ds = (DataSource) environmentContext.lookup(dataResourceName);
+
+            Connection conn = (Connection) ds.getConnection();
+            return conn;
+        }catch (SQLException e) {
             logger.error(e);
             throw new ConnectorException();
         }
-        //}
-        return connection;
+        catch (NamingException e) {
+            logger.error(e);
+            throw new  ConnectorException();
+        }
     }
 }

@@ -15,4 +15,11 @@ public class AdminService {
     /*public static int addUser(String login, String password, String role) throws UserDAOException {
         return AdminDAO.addUser(login, password, role);
     }*/
+    public static boolean updateAdmin(Admin admin) throws UserDAOException {
+        return AdminDAO.updateAdmin(admin);
+    }
+
+    public static Admin getAdminById(int id) throws UserDAOException {
+        return AdminDAO.getAdminById(id);
+    }
 }

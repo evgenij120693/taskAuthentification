@@ -17,28 +17,60 @@
     <%=error%>
 </div>
 <%}%>
-<fieldset class="fieldset row medium-4 large-3 columns callout left">
-    <legend>Регистрация</legend>
 
-    <form action="/taxi/registration" name="form" method="post">
-        Логин
-        <input type="text" name="login" value="">
-        Пароль
-        <input type="password" name="password" value="">
-        ФИО
-        <input type="text" name="name" value="">
-        Пол
-        <select name="sex">
-            <option value="m" selected>Мужской</option>
-            <option value="w">Женский</option>
-        </select>
-        Номер телефона
-        <input type="text" name="phone" value="">
-        Email
-        <input type="text" name="email" value="">
-        <input type="submit" class="button" style="float: right; margin: 0;" value="Зарегистрироваться">
-    </form>
+<div class="container">
+    <div class=" row col-md-6">
+        <form class="form-horizontal" action="/taxi/registration" method="post">
 
-</fieldset>
+            <fieldset>
+                <legend>Регистрация</legend>
+                <div class="form-group">
+                    <label for="login" class="control-label col-xs-2" style="padding-right: 0px;">Логин</label>
+                    <div class="col-xs-10">
+                        <input type="text" class="form-control" name="login" id="login" placeholder="Логин">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword" class="control-label col-xs-2" style="padding-right: 0px;">Пароль</label>
+                    <div class="col-xs-10">
+                        <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Пароль">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="control-label col-xs-2" style="padding-right: 0px;">ФИО</label>
+                    <div class="col-xs-10">
+                        <input type="text" class="form-control" name="name" id="name" placeholder="ФИО">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sex" class="control-label col-xs-2" style="padding-right: 0px;">Пол</label>
+                    <div class="col-xs-10">
+                        <select name="sex" id="sex" class="form-control">
+                            <option value="m" selected>Мужской</option>
+                            <option value="w">Женский</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="phone" class="control-label col-xs-2 " style="padding-right: 0px;">Телефон</label>
+                    <div class="col-xs-10">
+                        <input type="text" class="form-control" name="phone" id="phone" placeholder="Телефон">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="control-label col-xs-2" style="padding-right: 0px;">Email</label>
+                    <div class="col-xs-10">
+                        <input type="text" class="form-control" name="email" id="email" placeholder="Email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-offset-2 col-xs-10">
+                        <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
 </body>
 </html>

@@ -13,6 +13,7 @@
 <body>
 <h1>Личный кабинет админимстратора</h1>
 <ul>
+    <li><a href="/taxi/admin/edit_account">Редактирование профиля</a></li>
     <li><a href="/taxi/admin/list_client">Список клиентов</a></li>
     <li><a href="/taxi/admin/list_driver">Список водителей</a></li>
     <li><a href="/taxi/admin/list_auto">Список автомобилей</a></li>

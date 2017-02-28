@@ -12,6 +12,10 @@
 </head>
 <body>
 <h1>Личный кабинет клиента</h1>
-<% System.out.println(request.getParameter("name"));%>
+<a href="/taxi/client/edit" >Редактировать личные данные</a>
+<a href="/taxi/client/history_order" >История заявок</a>
+<a href="/taxi/client/taxi" >Заказ такси</a>
+
+
 </body>
 </html>
