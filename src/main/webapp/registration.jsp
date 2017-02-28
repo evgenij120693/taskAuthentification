@@ -8,6 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <%@include file="include/header.jsp" %>
+
+
 <body>
 <%
     String error = (String) request.getAttribute("error");

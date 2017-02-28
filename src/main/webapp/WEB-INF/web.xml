@@ -269,4 +269,13 @@
         <servlet-name>EditAdminAccount</servlet-name>
         <url-pattern>/admin/edit_account</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CreateTaxi</servlet-name>
+        <servlet-class>controllers.client.CreateOrderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreateTaxi</servlet-name>
+        <url-pattern>/client/taxi</url-pattern>
+    </servlet-mapping>
 </web-app>
