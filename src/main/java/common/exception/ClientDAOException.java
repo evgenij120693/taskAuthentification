@@ -1,7 +1,0 @@
-package common.exception;
-
-/**
- * Created by Шмыга on 25.02.2017.
- */
-public class ClientDAOException extends Exception {
-}

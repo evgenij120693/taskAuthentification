@@ -10,46 +10,49 @@
 <html>
 <head>
     <title>Добавление водителя</title>
+    <%@include file="../include/header_admin.jsp" %>
 </head>
 <body>
-<h1>Добавление водителч</h1>
+<div class="container">
+    <div class="row col-md-6">
+<h2>Добавление водителя</h2>
 <form action="/taxi/admin/add_driver" name="form" method="post">
     <input type="hidden" name="id" value="">
-    <table style="border: 1px solid grey; box-shadow: 0 0 3px green; margin:10px; padding:10px;">
+    <table class="table table-hover">
         <tr>
             <td>Логин</td>
-            <td><input type="text" name="login" value=""></td>
+            <td><input type="text" required class="form-control" name="login" value=""></td>
         </tr>
         <tr>
             <td>Пароль</td>
-            <td><input type="text" name="password" value=""></td>
+            <td><input type="text" required class="form-control" name="password" value=""></td>
         </tr>
         <tr>
             <td>Имя</td>
-            <td><input type="text" name="firstName" value=""></td>
+            <td><input type="text" required class="form-control" name="firstName" value=""></td>
 
         </tr>
         <tr>
             <td>Фамилия</td>
-            <td><input type="text" name="lastName" value=""></td>
+            <td><input type="text" class="form-control" name="lastName" value=""></td>
         </tr>
 
         <tr>
             <td>Телефон</td>
-            <td><input type="text" name="phone" value=""></td>
+            <td><input type="text" required class="form-control" name="phone" value=""></td>
         </tr>
 
         <tr>
             <td>Рейтинг</td>
-            <td><input type="text" name="rating" value=""></td>
+            <td><input type="text" required class="form-control" name="rating" value=""></td>
         </tr>
 
         <tr>
             <td>Автомобиль</td>
             <td>
-                <select name="auto">
+                <select class="form-control" name="auto">
                     <c:forEach items="${listAuto}" var="auto">
-                        <option value="<c:out value="${auto.getId()}"></c:out>">
+                        <option  value="<c:out value="${auto.getId()}"></c:out>">
                             <c:out value="${auto.getModel()}"></c:out>
                             <c:out value="${auto.getRegNumber()}"></c:out>
                         </option>
@@ -57,12 +60,12 @@
                 </select>
             </td>
         </tr>
-        <tr>
+        <!--<tr>
             <td>Статус</td>
-            <td><input type="text" disabled name="status" value="Не готов"></td>
-        </tr>
+            <td><input type="text" class="form-control" disabled name="status" value="Не готов"></td>
+        </tr>-->
     </table>
-    <input style="margin:10px;" type="submit" value="Добавить">
+    <input class="btn btn-primary" type="submit" value="Добавить">
 </form>
 
 </body>

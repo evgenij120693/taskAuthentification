@@ -10,36 +10,44 @@
 <html>
 <head>
     <title>Список клиентов</title>
+    <%@include file="../include/header_admin.jsp" %>
 </head>
 <body>
-<h1>Список клиентов</h1>
+<div class="container">
+    <div class="row col-md-9">
+        <h1>Список клиентов
+            <a href="/taxi/admin/add_client" title="Добавить клиента">
+                <img src="https://image.freepik.com/free-icon/no-translate-detected_318-34469.jpg"
+                     width="25px;">
+            </a>
+        </h1>
 
-<table border="2">
-    <tr>
-        <th>Логин</th>
-        <th>Пароль</th>
-        <th>Имя </th>
-        <th>Пол</th>
-        <th>Телефон</th>
-        <th>Email</th>
-    </tr>
-    <c:forEach items="${list}" var="client">
-        <tr>
-            <td><c:out value="${client.getLogin()}"></c:out></td>
-            <td><c:out value="${client.getPassword()}"></c:out></td>
-            <td><c:out value="${client.getName()}"></c:out></td>
-            <td>
-                <c:if test="${client.getSex() eq 'm'}">мужской</c:if>
-                <c:if test="${client.getSex() eq 'w'}">женский</c:if>
-            </td>
-            <td><c:out value="${client.getPhone()}"></c:out></td>
-            <td><c:out value="${client.getEmail()}"></c:out></td>
-            <td><a href="/taxi/admin/edit_client?id=<c:out value="${client.getId()}"></c:out>">edit</a>
-                <a href="/taxi/admin/delete_client?id=<c:out value="${client.getId()}"></c:out>">delete</a></td>
-        </tr>
-    </c:forEach>
-</table>
-<a href="/taxi/admin/add_client">Добавить клиента</a>
-<h2><a href="/taxi/logout">Выйти из личного кабинета</a></h2>
+        <table class="table table-hover">
+            <tr>
+                <th>Логин</th>
+                <th>Пароль</th>
+                <th>Имя</th>
+                <th>Пол</th>
+                <th>Телефон</th>
+                <th>Email</th>
+            </tr>
+            <c:forEach items="${list}" var="client">
+                <tr>
+                    <td><c:out value="${client.getLogin()}"></c:out></td>
+                    <td><c:out value="${client.getPassword()}"></c:out></td>
+                    <td><c:out value="${client.getName()}"></c:out></td>
+                    <td>
+                        <c:if test="${client.getSex() eq 'm'}">мужской</c:if>
+                        <c:if test="${client.getSex() eq 'w'}">женский</c:if>
+                    </td>
+                    <td><c:out value="${client.getPhone()}"></c:out></td>
+                    <td><c:out value="${client.getEmail()}"></c:out></td>
+                    <td><a href="/taxi/admin/edit_client?id=<c:out value="${client.getId()}"></c:out>">edit</a>
+                        <a href="/taxi/admin/delete_client?id=<c:out value="${client.getId()}"></c:out>">delete</a></td>
+                </tr>
+            </c:forEach>
+        </table>
+    </div>
+</div>
 </body>
 </html>

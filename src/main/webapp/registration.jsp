@@ -29,19 +29,19 @@
                 <div class="form-group">
                     <label for="login" class="control-label col-xs-2" style="padding-right: 0px;">Логин</label>
                     <div class="col-xs-10">
-                        <input type="text" class="form-control" name="login" id="login" placeholder="Логин">
+                        <input type="text" class="form-control" name="login" id="login" required=""  placeholder="Логин">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputPassword" class="control-label col-xs-2" style="padding-right: 0px;">Пароль</label>
                     <div class="col-xs-10">
-                        <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Пароль">
+                        <input type="password" name="password" class="form-control" id="inputPassword" required=""  placeholder="Пароль">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="name" class="control-label col-xs-2" style="padding-right: 0px;">ФИО</label>
                     <div class="col-xs-10">
-                        <input type="text" class="form-control" name="name" id="name" placeholder="ФИО">
+                        <input type="text" class="form-control" name="name" id="name" required=""  placeholder="ФИО">
                     </div>
                 </div>
                 <div class="form-group">
@@ -56,7 +56,7 @@
                 <div class="form-group">
                     <label for="phone" class="control-label col-xs-2 " style="padding-right: 0px;">Телефон</label>
                     <div class="col-xs-10">
-                        <input type="text" class="form-control" name="phone" id="phone" placeholder="Телефон">
+                        <input type="text" class="form-control" name="phone" id="phone" required=""  placeholder="Телефон">
                     </div>
                 </div>
                 <div class="form-group">

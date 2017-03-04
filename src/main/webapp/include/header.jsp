@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Шмыга
-  Date: 26.02.2017
-  Time: 21:24
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -32,8 +26,7 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/taxi/">Главная</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/taxi/login" class="">Войти</a></li>

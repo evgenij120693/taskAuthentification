@@ -1,10 +1,9 @@
 $(document).ready(function () {
 
     $( "input" ).change(function() {
-        console.log("change");
+
         var flag = false;
         $("input[type=text]").each(function () {
-            console.log($(this).val());
             if($(this).val()=="" && !flag){
                 flag = true;
             }

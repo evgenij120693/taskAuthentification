@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <context:component-scan base-package="ru.svetozarov"/>
+    <!--<bean id="userDAO" class="ru.svetozarov.ru.svetozarov.models.dao.UserDAO"></bean>-->
+    <!--<bean id="userService" class="ru.svetozarov.ru.svetozarov.services.UserService"></bean>-->
+    <!--<bean id="studentDAO" class="ru.svetozarov.ru.svetozarov.models.dao.StudentDAO"></bean>-->
+    <!--<bean id="studentService" class="ru.svetozarov.ru.svetozarov.services.StudentService"></bean>-->
+    <!--<bean id="LectionNotificator" class="ru.svetozarov.ru.svetozarov.common.utils.LectionNotificator"></bean>-->
+    <!--<bean id="lectionDAO" class="ru.svetozarov.ru.svetozarov.models.dao.LectionDAO"></bean>-->
+    <!--<bean id="lectionService" class="ru.svetozarov.ru.svetozarov.services.LectionService"></bean>-->
+    <context:annotation-config/>
+</beans>

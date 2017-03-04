@@ -9,32 +9,37 @@
 <html>
 <head>
     <title>Добавление автомобиля</title>
+    <%@include file="../include/header_admin.jsp" %>
 </head>
 <body>
-<h1>Добавление автомобиля</h1>
-<form action="/taxi/admin/add_auto" name="form" method="post">
-    <input type="hidden" name="id" value="">
-    <table style = "border: 1px solid grey; box-shadow: 0 0 3px green; margin:10px; padding:10px;">
-        <tr>
-            <td>Марка</td>
-            <td><input type="text" name="marka" value=""></td>
-        </tr>
-        <tr>
-            <td>Модель</td>
-            <td><input type="text" name="model" value=""></td>
-        </tr>
-        <tr>
-            <td>Регистрационный номер</td>
-            <td><input type="text" name="regNumber" value=""></td>
-        </tr>
-        <tr>
-            <td>Цвет</td>
-            <td><input type="text" name="color" value=""></td>
-        </tr>
+<div class="container">
+    <div class="row col-md-6">
+        <h2>Добавление автомобиля</h2>
+        <form action="/taxi/admin/add_auto" name="form" method="post">
+            <input type="hidden" name="id" value="">
+            <table class="table table-hover">
+                <tr>
+                    <td>Марка</td>
+                    <td><input type="text" class="form-control" required name="marka" value=""></td>
+                </tr>
+                <tr>
+                    <td>Модель</td>
+                    <td><input type="text" class="form-control" name="model" value=""></td>
+                </tr>
+                <tr>
+                    <td>Регистрационный номер</td>
+                    <td><input type="text" class="form-control" required name="regNumber" value=""></td>
+                </tr>
+                <tr>
+                    <td>Цвет</td>
+                    <td><input type="text" class="form-control" required name="color" value=""></td>
+                </tr>
 
-    </table>
-    <input style="margin:10px;" type="submit"  value="Добавить">
-</form>
+            </table>
+            <button type="submit" class="btn btn-primary" value="Добавить">Добавить</button>
+        </form>
 
+    </div>
+</div>
 </body>
 </html>

@@ -9,31 +9,34 @@
 
 <html>
 <head>
-    <script src="../js/jquery.js"></script>
-    <script src="../js/client/calculation_price.js"></script>
+    <%@include file="../include/header_client.jsp" %>
+
     <title>Заказ такси</title>
 </head>
 <body>
-<h1>Заказ такси</h1>
-<form action="/taxi/client/taxi" name="form" method="post">
-    <input type="hidden" name="id" value="">
-    <table style = "border: 1px solid grey; box-shadow: 0 0 3px green; margin:10px; padding:10px;">
-        <tr>
-            <td>Откуда</td>
-            <td><input type="text" name="punkt_a" value=""></td>
-        </tr>
-        <tr>
-            <td>Куда</td>
-            <td><input type="text" name="punkt_b" value=""></td>
-        </tr>
-        <tr id="tr_price" style="display:none;">
-            <td>Цена</td>
-            <td><input type="text" readonly name="price" id="price" value="0">
-                </td>
-        </tr>
-    </table>
-    <input style="display:none; margin:10px;" id="submit" type="submit"  value="Заказать">
-</form>
-
+<div class="container">
+    <h2>Заказ такси</h2>
+    <div class="row col-md-6">
+        <form action="/taxi/client/taxi" name="form" method="post">
+            <input type="hidden" name="id" value="">
+            <table class="table table-hover">
+                <tr>
+                    <td>Откуда</td>
+                    <td><input type="text" class="form-control" name="punkt_a" value=""></td>
+                </tr>
+                <tr>
+                    <td>Куда</td>
+                    <td><input type="text" class="form-control" name="punkt_b" value=""></td>
+                </tr>
+                <tr id="tr_price" style="display:none;">
+                    <td>Цена</td>
+                    <td><input type="text" class="form-control" readonly name="price" id="price" value="0">
+                    </td>
+                </tr>
+            </table>
+            <input class="btn btn-primary" style="display:none; " id="submit" type="submit" value="Заказать">
+        </form>
+    </div>
+</div>
 </body>
 </html>

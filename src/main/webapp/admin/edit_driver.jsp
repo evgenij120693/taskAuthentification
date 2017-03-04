@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="models.pojo.Driver" %><%--
+<%@ page import="ru.svetozarov.models.pojo.Driver" %><%--
   Created by IntelliJ IDEA.
   User: Шмыга
   Date: 26.02.2017
@@ -10,45 +10,48 @@
 <html>
 <head>
     <title>Редактирование водителя</title>
+    <%@include file="../include/header_admin.jsp" %>
 </head>
 <body>
 <%Driver driver = (Driver) request.getAttribute("driver");%>
-<h1>Редактирование водителя</h1>
+<div class="container">
+    <div class="row col-md-6">
+<h2>Редактирование водителя</h2>
 <form action="/taxi/admin/edit_driver" name="form" method="post">
     <input type="hidden" name="id" value="<%=driver.getId()%>">
-    <table style="border: 1px solid grey; box-shadow: 0 0 3px green; margin:10px; padding:10px;">
+    <table class="table table-hover">
         <tr>
             <td>Логин</td>
-            <td><input type="text" name="login" value="<%=driver.getLogin()%>"></td>
+            <td><input type="text" class="form-control" name="login" value="<%=driver.getLogin()%>"></td>
         </tr>
         <tr>
             <td>Пароль</td>
-            <td><input type="text" name="password" value="<%=driver.getPassword()%>"></td>
+            <td><input type="text" class="form-control" name="password" value="<%=driver.getPassword()%>"></td>
         </tr>
         <tr>
             <td>Имя</td>
-            <td><input type="text" name="firstName" value="<%=driver.getFirstName()%>"></td>
+            <td><input type="text" class="form-control" name="firstName" value="<%=driver.getFirstName()%>"></td>
 
         </tr>
         <tr>
             <td>Фамилия</td>
-            <td><input type="text" name="lastName" value="<%=driver.getLastName()%>"></td>
+            <td><input type="text" class="form-control" name="lastName" value="<%=driver.getLastName()%>"></td>
         </tr>
 
         <tr>
             <td>Телефон</td>
-            <td><input type="text" name="phone" value="<%=driver.getPhoneNumber()%>"></td>
+            <td><input type="text" class="form-control" name="phone" value="<%=driver.getPhoneNumber()%>"></td>
         </tr>
 
         <tr>
             <td>Рейтинг</td>
-            <td><input type="text" name="rating" value="<%=driver.getRating()%>"></td>
+            <td><input type="text" class="form-control" name="rating" value="<%=driver.getRating()%>"></td>
         </tr>
 
         <tr>
             <td>Автомобиль</td>
             <td>
-                <select name="auto">
+                <select class="form-control" name="auto">
                     <c:forEach items="${listAuto}" var="auto">
                         <option value="<c:out value="${auto.getId()}"></c:out>"
                                 <c:if test="${auto.getId() eq driver.getAuto()}">selected</c:if>
@@ -60,12 +63,12 @@
                 </select>
             </td>
         </tr>
-        <tr>
+        <!--<tr>
             <td>Статус</td>
             <td><input type="text"  name="status" value="<%=driver.getStatus()%>"></td>
-        </tr>
+        </tr>-->
     </table>
-    <input style="margin:10px;" type="submit" value="Сохранить изменения">
+    <input class="btn btn-primary" type="submit" value="Сохранить изменения">
 </form>
 </body>
 </html>

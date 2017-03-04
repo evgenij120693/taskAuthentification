@@ -15,61 +15,82 @@
 
     </resource-ref>
 
-
-    <filter>
-        <filter-name>AuthenticationFilter</filter-name>
-        <filter-class>controllers.filters.AuthentificationFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>AuthenticationFilter</filter-name>
-        <url-pattern>/admin/*</url-pattern>
-        <url-pattern>/admin</url-pattern>
-        <url-pattern>/driver/*</url-pattern>
-        <url-pattern>/driver</url-pattern>
-        <url-pattern>/client/*</url-pattern>
-        <url-pattern>/client</url-pattern>
-    </filter-mapping>
-
-    
-    
-    <filter>
-        <filter-name>CheckRoleAdminFilter</filter-name>
-        <filter-class>controllers.filters.CheckRoleAdminFilter</filter-class>
-
-    </filter>
-    <filter-mapping>
-        <filter-name>CheckRoleAdminFilter</filter-name>
-        <url-pattern>/admin/*</url-pattern>
-        <url-pattern>/admin</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-    </filter-mapping>
-
-    <filter>
-        <filter-name>CheckRoleDriverFilter</filter-name>
-        <filter-class>controllers.filters.CheckRoleDriverFilter</filter-class>
-
-    </filter>
-    <filter-mapping>
-        <filter-name>CheckRoleDriverFilter</filter-name>
-        <url-pattern>/driver/*</url-pattern>
-        <url-pattern>/driver</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-    </filter-mapping>
-
-    <filter>
-        <filter-name>CheckRoleClientFilter</filter-name>
-        <filter-class>controllers.filters.CheckRoleClientFilter</filter-class>
-
-    </filter>
-    <filter-mapping>
-        <filter-name>CheckRoleClientFilter</filter-name>
-        <url-pattern>/client/*</url-pattern>
-        <url-pattern>/client</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-    </filter-mapping>
-    
     <listener>
-        <listener-class>controllers.listener.SessionListeners</listener-class>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            /WEB-INF/beans.xml
+        </param-value>
+    </context-param>
+
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>ru.svetozarov.controllers.filters.AuthentificationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+        <url-pattern>/admin</url-pattern>
+        <url-pattern>/driver/*</url-pattern>
+        <url-pattern>/driver</url-pattern>
+        <url-pattern>/client/*</url-pattern>
+        <url-pattern>/client</url-pattern>
+    </filter-mapping>
+
+    
+    
+    <filter>
+        <filter-name>CheckRoleAdminFilter</filter-name>
+        <filter-class>ru.svetozarov.controllers.filters.CheckRoleAdminFilter</filter-class>
+
+    </filter>
+    <filter-mapping>
+        <filter-name>CheckRoleAdminFilter</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+        <url-pattern>/admin</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>CheckRoleDriverFilter</filter-name>
+        <filter-class>ru.svetozarov.controllers.filters.CheckRoleDriverFilter</filter-class>
+
+    </filter>
+    <filter-mapping>
+        <filter-name>CheckRoleDriverFilter</filter-name>
+        <url-pattern>/driver/*</url-pattern>
+        <url-pattern>/driver</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>CheckRoleClientFilter</filter-name>
+        <filter-class>ru.svetozarov.controllers.filters.CheckRoleClientFilter</filter-class>
+
+    </filter>
+    <filter-mapping>
+        <filter-name>CheckRoleClientFilter</filter-name>
+        <url-pattern>/client/*</url-pattern>
+        <url-pattern>/client</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+
+
+    <filter>
+        <filter-name>CheckLoginFilter</filter-name>
+        <filter-class>ru.svetozarov.controllers.filters.CheckLoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CheckLoginFilter</filter-name>
+        <url-pattern>/index.jsp</url-pattern>
+        <url-pattern>/login</url-pattern>
+        <url-pattern>/registration</url-pattern>
+    </filter-mapping>
+
+    <listener>
+        <listener-class>ru.svetozarov.controllers.listener.SessionListeners</listener-class>
     </listener>
 
     <context-param>
@@ -78,21 +99,23 @@
     </context-param>
 
     
-    <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
-    </welcome-file-list>
+    <!--<welcome-file-list>-->
+        <!--<welcome-file>index.jsp</welcome-file>-->
+    <!--</welcome-file-list>-->
 
     <!--<listener>-->
-        <!--<listener-class>controllers.listeners.ApplicationLoadListener</listener-class>-->
+        <!--<listener-class>ru.svetozarov.controllers.listeners.ApplicationLoadListener</listener-class>-->
     <!--</listener>-->
 
     <!--<listener>-->
-        <!--<listener-class>controllers.listeners.SessionListener</listener-class>-->
+        <!--<listener-class>ru.svetozarov.controllers.listeners.SessionListener</listener-class>-->
     <!--</listener>-->
-    
+
+
+
     <servlet>
         <servlet-name>Registration</servlet-name>
-        <servlet-class>controllers.RegistrationServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.RegistrationServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Registration</servlet-name>
@@ -101,7 +124,7 @@
     
     <servlet>
         <servlet-name>Login</servlet-name>
-        <servlet-class>controllers.LoginServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.LoginServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
@@ -110,7 +133,7 @@
     
     <servlet>
         <servlet-name>Admin</servlet-name>
-        <servlet-class>controllers.admin.AdminAccountServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.admin.AdminAccountServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Admin</servlet-name>
@@ -119,7 +142,7 @@
     
     <servlet>
         <servlet-name>Client</servlet-name>
-        <servlet-class>controllers.client.ClientAccountServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.client.ClientAccountServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Client</servlet-name>
@@ -128,7 +151,7 @@
     
     <servlet>
         <servlet-name>Driver</servlet-name>
-        <servlet-class>controllers.driver.DriverAccountServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.driver.DriverAccountServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Driver</servlet-name>
@@ -137,7 +160,7 @@
     
     <servlet>
         <servlet-name>ListClient</servlet-name>
-        <servlet-class>controllers.admin.ListClientServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.admin.ListClientServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ListClient</servlet-name>
@@ -146,7 +169,7 @@
     
     <servlet>
         <servlet-name>AddClient</servlet-name>
-        <servlet-class>controllers.admin.AddClientServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.admin.AddClientServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AddClient</servlet-name>
@@ -155,7 +178,7 @@
     
     <servlet>
         <servlet-name>EditClient</servlet-name>
-        <servlet-class>controllers.admin.EditClientServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.admin.EditClientServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>EditClient</servlet-name>
@@ -164,7 +187,7 @@
     
     <servlet>
         <servlet-name>DeleteClient</servlet-name>
-        <servlet-class>controllers.admin.DeleteClientServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.admin.DeleteClientServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DeleteClient</servlet-name>
@@ -173,7 +196,7 @@
     
     <servlet>
         <servlet-name>Logout</servlet-name>
-        <servlet-class>controllers.LogoutServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.LogoutServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
@@ -182,7 +205,7 @@
     
     <servlet>
         <servlet-name>ListDriver</servlet-name>
-        <servlet-class>controllers.admin.ListDriverServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.admin.ListDriverServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ListDriver</servlet-name>
@@ -191,7 +214,7 @@
     
     <servlet>
         <servlet-name>AddDriver</servlet-name>
-        <servlet-class>controllers.admin.AddDriverServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.admin.AddDriverServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AddDriver</servlet-name>
@@ -200,7 +223,7 @@
 
     <servlet>
         <servlet-name>EditDriver</servlet-name>
-        <servlet-class>controllers.admin.EditDriverServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.admin.EditDriverServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>EditDriver</servlet-name>
@@ -209,7 +232,7 @@
     
     <servlet>
         <servlet-name>DeleteDriver</servlet-name>
-        <servlet-class>controllers.admin.DeleteDriverServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.admin.DeleteDriverServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DeleteDriver</servlet-name>
@@ -218,7 +241,7 @@
     
     <servlet>
         <servlet-name>ListAuto</servlet-name>
-        <servlet-class>controllers.admin.ListAutoServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.admin.ListAutoServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ListAuto</servlet-name>
@@ -227,7 +250,7 @@
     
     <servlet>
         <servlet-name>EditAuto</servlet-name>
-        <servlet-class>controllers.admin.EditAutoServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.admin.EditAutoServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>EditAuto</servlet-name>
@@ -236,7 +259,7 @@
     
     <servlet>
         <servlet-name>AddAuto</servlet-name>
-        <servlet-class>controllers.admin.AddAutoServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.admin.AddAutoServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>AddAuto</servlet-name>
@@ -245,7 +268,7 @@
 
     <servlet>
         <servlet-name>DeleteAuto</servlet-name>
-        <servlet-class>controllers.admin.DeleteAutoServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.admin.DeleteAutoServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DeleteAuto</servlet-name>
@@ -254,7 +277,7 @@
     
     <servlet>
         <servlet-name>Client/EditClient</servlet-name>
-        <servlet-class>controllers.client.EditClientServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.client.EditClientServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Client/EditClient</servlet-name>
@@ -263,7 +286,7 @@
 
     <servlet>
         <servlet-name>EditAdminAccount</servlet-name>
-        <servlet-class>controllers.admin.EditAccountServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.admin.EditAccountServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>EditAdminAccount</servlet-name>
@@ -272,10 +295,55 @@
 
     <servlet>
         <servlet-name>CreateTaxi</servlet-name>
-        <servlet-class>controllers.client.CreateOrderServlet</servlet-class>
+        <servlet-class>ru.svetozarov.controllers.client.CreateOrderServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CreateTaxi</servlet-name>
         <url-pattern>/client/taxi</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Driver/EditAccount</servlet-name>
+        <servlet-class>ru.svetozarov.controllers.driver.EditDriverServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Driver/EditAccount</servlet-name>
+        <url-pattern>/driver/edit</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>Driver/ListNewOrder</servlet-name>
+        <servlet-class>ru.svetozarov.controllers.driver.ListNewOrderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Driver/ListNewOrder</servlet-name>
+        <url-pattern>/driver/list_new_order</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>Driver/ExecuteOrder</servlet-name>
+        <servlet-class>ru.svetozarov.controllers.driver.ExecuteOrderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Driver/ExecuteOrder</servlet-name>
+        <url-pattern>/driver/order_execute</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Driver/DoneOrder</servlet-name>
+        <servlet-class>ru.svetozarov.controllers.driver.ListDoneOrderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Driver/DoneOrder</servlet-name>
+        <url-pattern>/driver/list_done_order</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Client/HistoryOrder</servlet-name>
+        <servlet-class>ru.svetozarov.controllers.client.ListOrderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Client/HistoryOrder</servlet-name>
+        <url-pattern>/client/history_order</url-pattern>
     </servlet-mapping>
 </web-app>
