@@ -1,10 +1,13 @@
 package ru.svetozarov.controllers.driver;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.OrderDAOException;
 import ru.svetozarov.models.pojo.Order;
 import org.apache.log4j.Logger;
 import ru.svetozarov.services.OrderService;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +20,23 @@ import java.util.List;
  */
 public class ListNewOrderServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(ListNewOrderServlet.class);
+
+    private OrderService orderService;
+    @Autowired
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try{
-            List<Order> list = OrderService.getListOrderByDriverAndStatus(0, 1);
+            List<Order> list = orderService.getListOrderByDriverAndStatus(0, 1);
             req.setAttribute("list", list);
             req.getRequestDispatcher("/driver/list_new_order.jsp").forward(req, resp);
         }catch (OrderDAOException e){

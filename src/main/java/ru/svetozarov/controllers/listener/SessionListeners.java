@@ -1,5 +1,6 @@
 package ru.svetozarov.controllers.listener;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.svetozarov.common.exception.UserDAOException;
 import ru.svetozarov.common.util.SenderMail;
 import ru.svetozarov.models.dao.AdminDAO;
@@ -18,6 +19,17 @@ public class SessionListeners implements HttpSessionListener, HttpSessionAttribu
 
     private static Logger logger = Logger.getLogger(SessionListeners.class);
     private int id;
+    private AdminDAO adminDAO;
+    private SenderMail senderMail;
+    @Autowired
+    public void setSenderMail(SenderMail senderMail) {
+        this.senderMail = senderMail;
+    }
+
+    @Autowired
+    public void setAdminDAO(AdminDAO adminDAO) {
+        this.adminDAO = adminDAO;
+    }
 
     @Override
     public void attributeAdded(HttpSessionBindingEvent event) {
@@ -28,9 +40,9 @@ public class SessionListeners implements HttpSessionListener, HttpSessionAttribu
         if (event.getName().equals("role") && event.getValue().equals("admin")) {
             try {
                 logger.trace("send messag");
-                Admin admin = AdminDAO.getAdminById((Integer) id);
+                Admin admin = adminDAO.getAdminById((Integer) id);
                 if (admin.getSendEmailFlag() != 0) {
-                    SenderMail.sendMail(admin.getEmail(), "Авторизация в системе 'Такси онлайн'",
+                    senderMail.sendMail(admin.getEmail(), "Авторизация в системе 'Такси онлайн'",
                             "Вы авторизовались в системе");
                 }
             } catch (UserDAOException e) {

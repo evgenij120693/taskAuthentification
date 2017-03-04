@@ -1,6 +1,7 @@
 package ru.svetozarov.controllers.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.AutoDAOException;
 import ru.svetozarov.common.exception.DriverDAOException;
 import ru.svetozarov.common.exception.UserDAOException;
@@ -11,6 +12,7 @@ import ru.svetozarov.services.AutoService;
 import ru.svetozarov.services.DriverService;
 import ru.svetozarov.services.UserService;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +26,18 @@ import java.util.List;
 public class EditDriverServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(EditDriverServlet.class);
 
+    private DriverService driverService;
+    private AutoService autoService;
+    @Autowired
+    public void setAutoService(AutoService autoService) {
+        this.autoService = autoService;
+    }
+
+    @Autowired
+    public void setDriverService(DriverService driverService) {
+        this.driverService = driverService;
+    }
+
     private UserService userService;
     @Autowired
     public void setUserService(UserService userService) {
@@ -31,12 +45,18 @@ public class EditDriverServlet extends HttpServlet {
     }
 
     @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+    }
+
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         logger.trace(req.getParameter("id"));
         int id = (!req.getParameter("id").equals("") ) ? Integer.valueOf(req.getParameter("id")) : 0;
         try {
-            Driver driver = DriverService.getDriverById(id);
-            List<Auto> autoList = AutoService.getAllAuto();
+            Driver driver = driverService.getDriverById(id);
+            List<Auto> autoList = autoService.getAllAuto();
             if (driver != null) {
                 logger.trace("Get Driver by id=" + id);
                 req.setAttribute("driver", driver);
@@ -73,7 +93,7 @@ public class EditDriverServlet extends HttpServlet {
                     1
             );
                 if(userService.checkUserByLoginAndId(req.getParameter("login"), id)) {
-                    if(DriverService.updateDriver(driver)) {
+                    if(driverService.updateDriver(driver)) {
                         logger.trace("Edit Driver by id=" + id);
                         resp.sendRedirect("/taxi/admin/list_driver");
                     }else{

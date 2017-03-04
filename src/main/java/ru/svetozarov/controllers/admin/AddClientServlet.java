@@ -1,6 +1,7 @@
 package ru.svetozarov.controllers.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.ClientDAOException;
 import ru.svetozarov.common.exception.UserDAOException;
 import ru.svetozarov.models.pojo.Client;
@@ -8,6 +9,7 @@ import org.apache.log4j.Logger;
 import ru.svetozarov.services.ClientService;
 import ru.svetozarov.services.UserService;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +26,18 @@ public class AddClientServlet extends HttpServlet {
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    private ClientService clientService;
+    @Autowired
+    public void setClientService(ClientService clientService) {
+        this.clientService = clientService;
+    }
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
     }
 
     @Override
@@ -50,7 +64,7 @@ public class AddClientServlet extends HttpServlet {
 
         try {
             if (userService.checkUserByLogin(client.getLogin())) {
-                if (ClientService.addClient(client)) {
+                if (clientService.addClient(client)) {
                     logger.trace("Client " + client.getName() + " added");
                     resp.sendRedirect("/taxi/admin/list_client");
                 } else {

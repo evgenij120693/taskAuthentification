@@ -1,5 +1,6 @@
 package ru.svetozarov.models.dao;
 
+import org.springframework.stereotype.Component;
 import ru.svetozarov.common.exception.UserDAOException;
 import ru.svetozarov.common.exception.ConnectorException;
 import ru.svetozarov.models.connector.Connector;
@@ -14,20 +15,21 @@ import java.sql.SQLException;
 /**
  * Created by Шмыга on 24.02.2017.
  */
+@Component
 public class AdminDAO {
     private static Logger logger = Logger.getLogger(AdminDAO.class);
-    private static final String SQL_FIND_USER = "Select * from taxi.admin where login = ? and password = ?";
-    private static final String SQL_ADMIN_BY_LOGIN = "Select * from taxi.admin where login = ?";
-    private static final String SQL_ADMIN_BY_ID = "Select * from taxi.admin where id= ?";
-    private static final String SQL_UPDATE_FLAG_SEND_MAIL = "update taxi.admin set send_mail_flag=?" +
+    private  final String SQL_FIND_USER = "Select * from taxi.admin where login = ? and password = ?";
+    private  final String SQL_ADMIN_BY_LOGIN = "Select * from taxi.admin where login = ?";
+    private  final String SQL_ADMIN_BY_ID = "Select * from taxi.admin where id= ?";
+    private  final String SQL_UPDATE_FLAG_SEND_MAIL = "update taxi.admin set send_mail_flag=?" +
             " where id=?";
-    private static final String SQL_UPDATE_ADMIN = "update taxi.admin set password=?, name=?, " +
+    private  final String SQL_UPDATE_ADMIN = "update taxi.admin set password=?, name=?, " +
             " email=?, send_email_flag=? where id=?";
 
-    private static final String SQL_INSERT_USER = "Insert into taxi.admin (login, password, name)" +
+    private  final String SQL_INSERT_USER = "Insert into taxi.admin (login, password, name)" +
             " values (?, ?, ?)";
 
-    public static Admin getAdminByLoginAndPassword(String login, String password)
+    public  Admin getAdminByLoginAndPassword(String login, String password)
             throws UserDAOException {
         Admin admin = null;
         try (Connection conn = Connector.getConnection();
@@ -57,7 +59,7 @@ public class AdminDAO {
     }
 
 
-    private static boolean checkUserByLogin(String login) throws UserDAOException {
+    private  boolean checkUserByLogin(String login) throws UserDAOException {
         try (Connection conn = Connector.getConnection();
              PreparedStatement prepS = conn.prepareStatement(SQL_ADMIN_BY_LOGIN)) {
             prepS.setString(1, login);
@@ -77,7 +79,7 @@ public class AdminDAO {
         return true;
     }
 
-    public static Admin getAdminById(int id) throws UserDAOException {
+    public  Admin getAdminById(int id) throws UserDAOException {
         Admin admin = null;
         try (Connection conn = Connector.getConnection();
              PreparedStatement prepS = conn.prepareStatement(SQL_ADMIN_BY_ID)) {
@@ -104,7 +106,7 @@ public class AdminDAO {
         return admin;
     }
 
-    public static boolean updateAdmin(Admin admin) throws UserDAOException {
+    public  boolean updateAdmin(Admin admin) throws UserDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(SQL_UPDATE_ADMIN);
             statement.setString(1, admin.getPassword());

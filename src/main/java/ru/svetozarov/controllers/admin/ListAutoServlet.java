@@ -1,10 +1,13 @@
 package ru.svetozarov.controllers.admin;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.AutoDAOException;
 import ru.svetozarov.models.pojo.Auto;
 import org.apache.log4j.Logger;
 import ru.svetozarov.services.AutoService;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +20,23 @@ import java.util.List;
  */
 public class ListAutoServlet extends HttpServlet{
     private static Logger logger = Logger.getLogger(ListDriverServlet.class);
+
+    private AutoService autoService;
+    @Autowired
+    public void setAutoService(AutoService autoService) {
+        this.autoService = autoService;
+    }
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            List<Auto> list = AutoService.getAllAuto();
+            List<Auto> list = autoService.getAllAuto();
             logger.trace("get all auto count="+list.size());
             req.setAttribute("list", list);
             req.getRequestDispatcher("/admin/list_auto.jsp").forward(req, resp);

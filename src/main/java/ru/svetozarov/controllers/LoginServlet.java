@@ -25,6 +25,11 @@ import java.io.IOException;
  */
 public class LoginServlet extends HttpServlet {
     private UserService userService;
+    private HashPassword hashPassword;
+    @Autowired
+    public void setHashPassword(HashPassword hashPassword) {
+        this.hashPassword = hashPassword;
+    }
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -53,7 +58,7 @@ public class LoginServlet extends HttpServlet {
         int id = 0;
         try {
             User user = null;
-                user = userService.getUserByLoginAndPassword(login, HashPassword.hashingPassword(password));
+                user = userService.getUserByLoginAndPassword(login, hashPassword.hashingPassword(password));
 
             if (user != null) {
                 setSession(user.getId(), user.getRole(), user.getName(), req);

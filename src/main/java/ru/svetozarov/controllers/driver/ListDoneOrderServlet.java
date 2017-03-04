@@ -1,10 +1,13 @@
 package ru.svetozarov.controllers.driver;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.OrderDAOException;
 import ru.svetozarov.models.pojo.Order;
 import org.apache.log4j.Logger;
 import ru.svetozarov.services.OrderService;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,12 +22,24 @@ import java.util.List;
 public class ListDoneOrderServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(ListDoneOrderServlet.class);
 
+    private OrderService orderService;
+    @Autowired
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
         int id = (int) session.getAttribute("id");
         try{
-            List<Order> list = OrderService.getListOrderByDriverAndStatus(id, 4);
+            List<Order> list = orderService.getListOrderByDriverAndStatus(id, 4);
             req.setAttribute("list", list);
             req.getRequestDispatcher("/driver/list_done_order.jsp").forward(req, resp);
         }catch (OrderDAOException e){

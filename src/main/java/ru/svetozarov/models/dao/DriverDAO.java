@@ -1,5 +1,6 @@
 package ru.svetozarov.models.dao;
 
+import org.springframework.stereotype.Component;
 import ru.svetozarov.common.exception.ConnectorException;
 import ru.svetozarov.common.exception.DriverDAOException;
 import ru.svetozarov.models.connector.Connector;
@@ -15,27 +16,29 @@ import java.util.List;
 /**
  * Created by Шмыга on 25.02.2017.
  */
+@Component
 public class DriverDAO {
+
     private static Logger logger = Logger.getLogger(DriverDAO.class);
 
-    private static final String QUERY_SELECT_DRIVER_BY_LOGIN_AND_PASSWORD = "select * from taxi.driver as dr " +
+    private  final String QUERY_SELECT_DRIVER_BY_LOGIN_AND_PASSWORD = "select * from taxi.driver as dr " +
             "JOIN taxi.auto as au ON dr.id_auto = au.id JOIN taxi.status_driver as st ON dr.id_status = st.id" +
             " where dr.login=? and  dr.password=?";
-    // private static final String QUERY_SELECT_ALL_DRIVER = "select * from taxi.driver";
-    private static final String QUERY_SELECT_ALL_DRIVER = "select * from taxi.driver as dr " +
+    // private  final String QUERY_SELECT_ALL_DRIVER = "select * from taxi.driver";
+    private  final String QUERY_SELECT_ALL_DRIVER = "select * from taxi.driver as dr " +
             "JOIN taxi.auto as au ON dr.id_auto = au.id JOIN taxi.status_driver as st ON dr.id_status = st.id";
-    private static final String QUERY_ADD_DRIVER = "insert into taxi.driver (first_name, last_name, " +
+    private  final String QUERY_ADD_DRIVER = "insert into taxi.driver (first_name, last_name, " +
             "phone_number, login, password, rating, id_auto, id_status) values (?,?,?,?,?,?,?,?)";
-    private static final String QUERY_UPDATE_DRIVER = "update taxi.driver set first_name=?," +
+    private  final String QUERY_UPDATE_DRIVER = "update taxi.driver set first_name=?," +
             " last_name=?, phone_number=?, login=?, password=?, rating=?, id_auto=?, id_status=?" +
             " where id=?";
-    private static final String QUERY_SELECT_DRIVER_BY_ID = "select *from taxi.driver where id=?";
-    private static final String QUERY_SELECT_DRIVER_BY_ID_JOIN_AUTO_AND_STATUS = "select * from taxi.driver as dr " +
+    private  final String QUERY_SELECT_DRIVER_BY_ID = "select *from taxi.driver where id=?";
+    private  final String QUERY_SELECT_DRIVER_BY_ID_JOIN_AUTO_AND_STATUS = "select * from taxi.driver as dr " +
             "JOIN taxi.auto as au ON dr.id_auto = au.id JOIN taxi.status_driver as st ON dr.id_status = st.id" +
             " where dr.id=?";
-    private static final String QUERY_DELETE_DRIVER_BY_ID = "delete from taxi.driver where id=?";
+    private  final String QUERY_DELETE_DRIVER_BY_ID = "delete from taxi.driver where id=?";
 
-    public static Driver getDriverByLoginAndPassword(String login, String password) throws DriverDAOException {
+    public  Driver getDriverByLoginAndPassword(String login, String password) throws DriverDAOException {
         Driver driver = null;
 
         try (Connection conn = Connector.getConnection();
@@ -70,7 +73,7 @@ public class DriverDAO {
         return driver;
     }
 
-    public static List<Driver> getListDriver() throws DriverDAOException {
+    public  List<Driver> getListDriver() throws DriverDAOException {
         List<Driver> list = new ArrayList<>();
         try (Connection conn = Connector.getConnection()) {
             Statement statement = conn.createStatement();
@@ -110,7 +113,7 @@ public class DriverDAO {
         return list;
     }
 
-    public static boolean addDriver(Driver driver) throws DriverDAOException {
+    public  boolean addDriver(Driver driver) throws DriverDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = null;
             statement = conn.prepareStatement(QUERY_ADD_DRIVER);
@@ -139,7 +142,7 @@ public class DriverDAO {
         return false;
     }
 
-    public static Driver getDriverById(int id) throws DriverDAOException {
+    public  Driver getDriverById(int id) throws DriverDAOException {
         Driver driver = null;
         byte tr[]= new byte[200];
 
@@ -173,7 +176,7 @@ public class DriverDAO {
         return driver;
     }
 
-    public static Driver getDriverByIdJoinAutoAndStatus(int id) throws DriverDAOException {
+    public  Driver getDriverByIdJoinAutoAndStatus(int id) throws DriverDAOException {
         Driver driver = null;
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(QUERY_SELECT_DRIVER_BY_ID_JOIN_AUTO_AND_STATUS);
@@ -215,7 +218,7 @@ public class DriverDAO {
         return driver;
     }
 
-    public static boolean updateDriver(Driver driver) throws DriverDAOException {
+    public  boolean updateDriver(Driver driver) throws DriverDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = null;
             statement = conn.prepareStatement(QUERY_UPDATE_DRIVER);
@@ -246,7 +249,7 @@ public class DriverDAO {
         return false;
     }
 
-    public static boolean deleteDriverById(int id) throws DriverDAOException {
+    public  boolean deleteDriverById(int id) throws DriverDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement prepS = conn.prepareStatement(QUERY_DELETE_DRIVER_BY_ID);
             prepS.setInt(1, id);

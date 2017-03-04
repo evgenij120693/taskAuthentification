@@ -24,6 +24,18 @@ import java.io.IOException;
 public class RegistrationServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(RegistrationServlet.class);
 
+    private ClientService clientService;
+    @Autowired
+    public void setClientService(ClientService clientService) {
+        this.clientService = clientService;
+    }
+
+    private HashPassword hashPassword;
+    @Autowired
+    public void setHashPassword(HashPassword hashPassword) {
+        this.hashPassword = hashPassword;
+    }
+
     private UserService userService;
     @Autowired
     public void setUserService(UserService userService) {
@@ -47,7 +59,7 @@ public class RegistrationServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password;
         try {
-            password = HashPassword.hashingPassword(req.getParameter("password"));
+            password = hashPassword.hashingPassword(req.getParameter("password"));
 
             String role = "client";
             String greetings = "";
@@ -63,7 +75,7 @@ public class RegistrationServlet extends HttpServlet {
 
 
             if (userService.checkUserByLogin(client.getLogin())) {
-                if (ClientService.addClient(client)) {
+                if (clientService.addClient(client)) {
                     logger.trace("Client " + client.getName() + " added");
                     resp.sendRedirect("/taxi/login");
                 } else {

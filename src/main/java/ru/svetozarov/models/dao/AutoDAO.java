@@ -1,5 +1,6 @@
 package ru.svetozarov.models.dao;
 
+import org.springframework.stereotype.Component;
 import ru.svetozarov.common.exception.AutoDAOException;
 import ru.svetozarov.common.exception.ConnectorException;
 import ru.svetozarov.models.connector.Connector;
@@ -13,17 +14,18 @@ import java.util.List;
 /**
  * Created by Шмыга on 26.02.2017.
  */
+@Component
 public class AutoDAO {
     private static Logger logger = Logger.getLogger(AutoDAO.class);
-    private static final String QUERY_SELECT_ALL_AUTO = "select * from taxi.auto";
-    private static final String QUERY_SELECT_AUTO_BY_ID = "select * from taxi.auto WHERE id=?";
-    private static final String QUERY_UPDATE_AUTO = "update taxi.auto set marka=?, model=?, reg_number=?, " +
+    private  final String QUERY_SELECT_ALL_AUTO = "select * from taxi.auto";
+    private  final String QUERY_SELECT_AUTO_BY_ID = "select * from taxi.auto WHERE id=?";
+    private  final String QUERY_UPDATE_AUTO = "update taxi.auto set marka=?, model=?, reg_number=?, " +
             "color=? where id=?";
-    private static final String QUERY_ADD_AUTO = "insert into taxi.auto (marka, model, reg_number, color) " +
+    private  final String QUERY_ADD_AUTO = "insert into taxi.auto (marka, model, reg_number, color) " +
             "VALUE (?,?,?,?)";
-    private static final String QUERY_DELETE_AUTO_BY_ID = "delete from taxi.auto where id=?";
+    private  final String QUERY_DELETE_AUTO_BY_ID = "delete from taxi.auto where id=?";
 
-    public static List<Auto> getAllAuto() throws AutoDAOException {
+    public  List<Auto> getAllAuto() throws AutoDAOException {
         List<Auto> list = new ArrayList<>();
         try (Connection conn = Connector.getConnection()) {
             Statement statement = conn.createStatement();
@@ -49,7 +51,7 @@ public class AutoDAO {
         return list;
     }
 
-    public static Auto getAutoById(int id) throws AutoDAOException {
+    public  Auto getAutoById(int id) throws AutoDAOException {
         Auto auto = null;
         try (Connection conn = Connector.getConnection()) {
            PreparedStatement statement = conn.prepareStatement(QUERY_SELECT_AUTO_BY_ID);
@@ -77,7 +79,7 @@ public class AutoDAO {
         return auto;
     }
 
-    public static boolean updateAuto(Auto auto) throws AutoDAOException {
+    public  boolean updateAuto(Auto auto) throws AutoDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(QUERY_UPDATE_AUTO);
             statement.setString(1, auto.getMarka());
@@ -102,7 +104,7 @@ public class AutoDAO {
         return false;
     }
 
-    public static boolean addAuto(Auto auto) throws AutoDAOException {
+    public  boolean addAuto(Auto auto) throws AutoDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(QUERY_ADD_AUTO);
             statement.setString(1, auto.getMarka());
@@ -126,7 +128,7 @@ public class AutoDAO {
         return false;
     }
 
-    public static boolean deleteAutoById(int id) throws AutoDAOException {
+    public  boolean deleteAutoById(int id) throws AutoDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement prepS = conn.prepareStatement(QUERY_DELETE_AUTO_BY_ID);
             prepS.setInt(1, id);

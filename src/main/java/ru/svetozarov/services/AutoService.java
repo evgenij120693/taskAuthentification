@@ -1,5 +1,9 @@
 package ru.svetozarov.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 import ru.svetozarov.common.exception.AutoDAOException;
 import ru.svetozarov.models.dao.AutoDAO;
 import ru.svetozarov.models.pojo.Auto;
@@ -9,24 +13,33 @@ import java.util.List;
 /**
  * Created by Шмыга on 26.02.2017.
  */
+@Service
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class AutoService {
-    public static List<Auto> getAllAuto() throws AutoDAOException {
-        return AutoDAO.getAllAuto();
+
+    private AutoDAO autoDAO;
+    @Autowired
+    public void setAutoDAO(AutoDAO autoDAO) {
+        this.autoDAO = autoDAO;
     }
 
-    public static Auto getAutoById(int id) throws AutoDAOException {
-        return AutoDAO.getAutoById(id);
+    public  List<Auto> getAllAuto() throws AutoDAOException {
+        return autoDAO.getAllAuto();
     }
 
-    public static boolean updateAuto(Auto auto) throws AutoDAOException {
-        return AutoDAO.updateAuto(auto);
+    public  Auto getAutoById(int id) throws AutoDAOException {
+        return autoDAO.getAutoById(id);
     }
 
-    public static boolean addAuto(Auto auto) throws AutoDAOException {
-        return AutoDAO.addAuto(auto);
+    public  boolean updateAuto(Auto auto) throws AutoDAOException {
+        return autoDAO.updateAuto(auto);
     }
 
-    public static boolean deleteAuto(int id) throws AutoDAOException {
-        return AutoDAO.deleteAutoById(id);
+    public  boolean addAuto(Auto auto) throws AutoDAOException {
+        return autoDAO.addAuto(auto);
+    }
+
+    public  boolean deleteAuto(int id) throws AutoDAOException {
+        return autoDAO.deleteAutoById(id);
     }
 }

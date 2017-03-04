@@ -1,10 +1,13 @@
 package ru.svetozarov.controllers.driver;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.DriverDAOException;
 import ru.svetozarov.models.pojo.Driver;
 import org.apache.log4j.Logger;
 import ru.svetozarov.services.DriverService;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +20,19 @@ import java.io.IOException;
  */
 public class DriverAccountServlet extends HttpServlet {
     public static Logger logger = Logger.getLogger(DriverAccountServlet.class);
+
+    private DriverService driverService;
+    @Autowired
+    public void setDriverService(DriverService driverService) {
+        this.driverService = driverService;
+    }
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
@@ -24,7 +40,7 @@ public class DriverAccountServlet extends HttpServlet {
         int id = (int) session.getAttribute("id");
         if (id != 0) {
             try {
-                Driver driver = DriverService.getDriverByIdJoinAutoAndStatus(id);
+                Driver driver = driverService.getDriverByIdJoinAutoAndStatus(id);
                 //List<Status> statusList =  StatusService.getAllStatusDriver();
                 if (driver != null) {
                     req.setAttribute("driver", driver);

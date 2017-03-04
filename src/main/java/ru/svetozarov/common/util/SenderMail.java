@@ -1,6 +1,9 @@
 package ru.svetozarov.common.util;
 
+
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.*;
+import org.springframework.stereotype.Service;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -10,10 +13,12 @@ import java.util.Properties;
 /**
  * Created by Шмыга on 27.02.2017.
  */
+@Service
+
 public class SenderMail {
     private static Logger logger = Logger.getLogger(SenderMail.class);
-    private static String username = "evgenij.svetozarov@yandex.ru";
-    private static  String password = "utugub39";
+    private  String username = "evgenij.svetozarov@yandex.ru";
+    private   String password = "utugub39";
 
     /**
      * Отправка сообещния на email
@@ -21,7 +26,7 @@ public class SenderMail {
      * @param subject - тема письма
      * @param text - текст письма
      */
-    public static  void sendMail(String email, String subject, String text) {
+    public   void sendMail(String email, String subject, String text) {
         Properties props = new Properties();
         props.put("mail.smtp.host","smtp.yandex.ru" );
         props.put("mail.smtp.socketFactory.port", "465");

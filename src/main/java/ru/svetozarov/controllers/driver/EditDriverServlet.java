@@ -1,5 +1,7 @@
 package ru.svetozarov.controllers.driver;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.DriverDAOException;
 import ru.svetozarov.common.exception.StatusDAOException;
 import ru.svetozarov.models.pojo.Driver;
@@ -8,6 +10,7 @@ import org.apache.log4j.Logger;
 import ru.svetozarov.services.DriverService;
 import ru.svetozarov.services.StatusService;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +25,25 @@ import java.util.List;
 public class EditDriverServlet extends HttpServlet {
     public static Logger logger = Logger.getLogger(EditDriverServlet.class);
 
+    private DriverService driverService;
+    @Autowired
+    public void setDriverService(DriverService driverService) {
+        this.driverService = driverService;
+    }
+
+    private StatusService statusService;
+    @Autowired
+    public void setStatusService(StatusService statusService) {
+        this.statusService = statusService;
+    }
+
+    @Override
+
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
@@ -29,8 +51,8 @@ public class EditDriverServlet extends HttpServlet {
         int id = (int) session.getAttribute("id");
         if (id != 0) {
             try {
-                Driver driver = DriverService.getDriverByIdJoinAutoAndStatus(id);
-                List<Status> statusList = StatusService.getAllStatusDriver();
+                Driver driver = driverService.getDriverByIdJoinAutoAndStatus(id);
+                List<Status> statusList = statusService.getAllStatusDriver();
                 if (driver != null) {
                     req.setAttribute("driver", driver);
                     req.setAttribute("statusList", statusList);
@@ -56,7 +78,7 @@ public class EditDriverServlet extends HttpServlet {
         HttpSession session = req.getSession(false);
         int id = (int) session.getAttribute("id");
         try {
-            Driver temp = DriverService.getDriverById(id);
+            Driver temp = driverService.getDriverById(id);
             Driver driver = new Driver(
                     id,
                     req.getParameter("lastName"),
@@ -68,7 +90,7 @@ public class EditDriverServlet extends HttpServlet {
                     temp.getAuto(),
                     temp.getStatus()
                     );
-            if(DriverService.updateDriver(driver)){
+            if(driverService.updateDriver(driver)){
                 logger.trace("Update driver successful");
                 resp.sendRedirect("/taxi/driver");
             }else{

@@ -1,5 +1,6 @@
 package ru.svetozarov.models.dao;
 
+import org.springframework.stereotype.Component;
 import ru.svetozarov.common.exception.ClientDAOException;
 import ru.svetozarov.common.exception.ConnectorException;
 import ru.svetozarov.models.connector.Connector;
@@ -13,19 +14,20 @@ import java.util.List;
 /**
  * Created by Шмыга on 25.02.2017.
  */
+@Component
 public class ClientDAO {
     private static Logger logger = Logger.getLogger(ClientDAO.class);
-    private static final String QUERY_SELECT_ALL = "select * from taxi.client";
-    private static final String QUERY_SELECT_CLIENT_BY_LOGIN_AND_PASSWORD = "select * from taxi.client " +
+    private  final String QUERY_SELECT_ALL = "select * from taxi.client";
+    private  final String QUERY_SELECT_CLIENT_BY_LOGIN_AND_PASSWORD = "select * from taxi.client " +
             "where login=? and password=?";
-    private static final String QUERY_INSERT_CLIENT = "insert into taxi.client ( name, sex, phone, email," +
+    private  final String QUERY_INSERT_CLIENT = "insert into taxi.client ( name, sex, phone, email," +
             "login, password ) values ( ?, ?, ?, ?, ?, ?)";
-    private static final String QUERY_SELECY_CLIENT_BY_ID = "select * from taxi.client where id=?";
-    private static final String QUERY_UPDATE_CLIENT = "update taxi.client set name=?, sex=?, phone=?, " +
+    private  final String QUERY_SELECY_CLIENT_BY_ID = "select * from taxi.client where id=?";
+    private  final String QUERY_UPDATE_CLIENT = "update taxi.client set name=?, sex=?, phone=?, " +
             "email=?, login=?, password=? where id=?";
-    private static final String QUERY_DELETE_CLIENT = "delete from taxi.client where id=?";
+    private  final String QUERY_DELETE_CLIENT = "delete from taxi.client where id=?";
 
-    public static List<Client> getAllClient() throws ClientDAOException {
+    public  List<Client> getAllClient() throws ClientDAOException {
         List<Client> list = new ArrayList<>();
         try (Connection conn = Connector.getConnection()) {
             Statement statement = conn.createStatement();
@@ -53,7 +55,7 @@ public class ClientDAO {
         return list;
     }
 
-    public static boolean addClient(Client client) throws ClientDAOException {
+    public  boolean addClient(Client client) throws ClientDAOException {
 
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = null;
@@ -81,7 +83,7 @@ public class ClientDAO {
         return false;
     }
 
-    public static Client getClientByLoginAndPassword(String login, String password) throws ClientDAOException {
+    public  Client getClientByLoginAndPassword(String login, String password) throws ClientDAOException {
         Client client = null;
 
         try (Connection conn = Connector.getConnection();
@@ -114,7 +116,7 @@ public class ClientDAO {
         return client;
     }
 
-    public static Client getClientById(int id) throws ClientDAOException {
+    public  Client getClientById(int id) throws ClientDAOException {
         Client client = null;
 
         try (Connection conn = Connector.getConnection();
@@ -143,7 +145,7 @@ public class ClientDAO {
         return client;
     }
 
-    public static boolean updateClient(Client client) throws ClientDAOException {
+    public  boolean updateClient(Client client) throws ClientDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = null;
             statement = conn.prepareStatement(QUERY_UPDATE_CLIENT);
@@ -171,7 +173,7 @@ public class ClientDAO {
         return false;
     }
 
-    public static boolean deleteClientById(int id) throws ClientDAOException {
+    public  boolean deleteClientById(int id) throws ClientDAOException {
 
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement prepS = conn.prepareStatement(QUERY_DELETE_CLIENT);

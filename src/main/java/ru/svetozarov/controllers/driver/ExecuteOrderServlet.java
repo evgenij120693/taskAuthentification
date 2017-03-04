@@ -1,10 +1,13 @@
 package ru.svetozarov.controllers.driver;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.OrderDAOException;
 import ru.svetozarov.models.pojo.Order;
 import org.apache.log4j.Logger;
 import ru.svetozarov.services.OrderService;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +21,19 @@ import java.sql.Timestamp;
  */
 public class ExecuteOrderServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(ExecuteOrderServlet.class);
+
+    private OrderService orderService;
+    @Autowired
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
@@ -39,7 +55,7 @@ public class ExecuteOrderServlet extends HttpServlet {
                     4
             );
             try {
-                if (OrderService.updateOrderOfDriver(order)) {
+                if (orderService.updateOrderOfDriver(order)) {
                     logger.trace("Update successful");
                     resp.sendRedirect("/taxi/driver/list_new_order");
                 }else{

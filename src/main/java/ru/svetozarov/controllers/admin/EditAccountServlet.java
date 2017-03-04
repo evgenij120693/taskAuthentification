@@ -1,10 +1,13 @@
 package ru.svetozarov.controllers.admin;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.UserDAOException;
 import ru.svetozarov.models.pojo.Admin;
 import org.apache.log4j.Logger;
 import ru.svetozarov.services.AdminService;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +20,19 @@ import java.io.IOException;
  */
 public class EditAccountServlet extends HttpServlet {
     public static Logger logger = Logger.getLogger(EditAccountServlet.class);
+
+    private AdminService adminService;
+    @Autowired
+    public void setAdminService(AdminService adminService) {
+        this.adminService = adminService;
+    }
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
@@ -24,7 +40,7 @@ public class EditAccountServlet extends HttpServlet {
         int id = (int) session.getAttribute("id");
         if (id != 0) {
             try {
-                Admin admin = AdminService.getAdminById(id);
+                Admin admin = adminService.getAdminById(id);
                 if (admin != null) {
                     req.setAttribute("admin", admin);
                     req.getRequestDispatcher("/admin/edit_account.jsp").forward(req, resp);
@@ -52,7 +68,7 @@ public class EditAccountServlet extends HttpServlet {
         int flag = (req.getParameter("flag")!=null && req.getParameter("flag").equals("on"))
                 ?1:0;
         try {
-            Admin temp = AdminService.getAdminById(id);
+            Admin temp = adminService.getAdminById(id);
             Admin admin = new Admin(
                     id,
                     temp.getLogin(),
@@ -62,7 +78,7 @@ public class EditAccountServlet extends HttpServlet {
                     flag
             );
 
-            if (AdminService.updateAdmin(admin)) {
+            if (adminService.updateAdmin(admin)) {
                 logger.trace("Admin " + admin.getName() + " updated");
                 resp.sendRedirect("/taxi/admin");
             } else {

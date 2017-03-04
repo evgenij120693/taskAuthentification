@@ -1,10 +1,13 @@
 package ru.svetozarov.controllers.client;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.OrderDAOException;
 import ru.svetozarov.models.pojo.Order;
 import org.apache.log4j.Logger;
 import ru.svetozarov.services.OrderService;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,12 +21,25 @@ import java.sql.Timestamp;
  */
 public class CreateOrderServlet extends HttpServlet {
     public static Logger logger = Logger.getLogger(CreateOrderServlet.class);
+
+    private OrderService orderService;
+    @Autowired
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
         int id_client = (int) session.getAttribute("id");
         try {
-            Order order = OrderService.getOrderActualByClient(id_client);
+            Order order = orderService.getOrderActualByClient(id_client);
             if(order != null){
                 req.setAttribute("order", order);
                 req.getRequestDispatcher("/client/actual_order.jsp").forward(req, resp);
@@ -55,7 +71,7 @@ public class CreateOrderServlet extends HttpServlet {
                 1
         );
         try {
-            if(OrderService.addOrder(order)){
+            if(orderService.addOrder(order)){
                 logger.trace("Order registration successfull");
                 resp.sendRedirect("/taxi/client/taxi");
             }else {

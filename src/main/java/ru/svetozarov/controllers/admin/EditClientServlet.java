@@ -1,6 +1,7 @@
 package ru.svetozarov.controllers.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.ClientDAOException;
 import ru.svetozarov.common.exception.UserDAOException;
 import ru.svetozarov.models.pojo.Client;
@@ -8,6 +9,7 @@ import org.apache.log4j.Logger;
 import ru.svetozarov.services.ClientService;
 import ru.svetozarov.services.UserService;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,10 +21,23 @@ import java.io.IOException;
  */
 public class EditClientServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(EditClientServlet.class);
+
+    private ClientService clientService;
+    @Autowired
+    public void setClientService(ClientService clientService) {
+        this.clientService = clientService;
+    }
+
     private UserService userService;
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
     }
 
     @Override
@@ -31,7 +46,7 @@ public class EditClientServlet extends HttpServlet {
         int id = (!req.getParameter("id").equals(""))? Integer.valueOf(req.getParameter("id")):0;
         if(id != 0){
             try {
-                Client client = ClientService.getClientBiId(id);
+                Client client = clientService.getClientBiId(id);
                 if(client != null){
                     req.setAttribute("client", client);
                     req.getRequestDispatcher("/admin/edit_client.jsp").forward(req, resp);
@@ -66,7 +81,7 @@ public class EditClientServlet extends HttpServlet {
         );
         try {
             if (userService.checkUserByLoginAndId(client.getLogin(), client.getId())) {
-                if (ClientService.updateClient(client)) {
+                if (clientService.updateClient(client)) {
                     logger.trace("Client " + client.getName() + " updated");
                     resp.sendRedirect("/taxi/admin/list_client");
                 } else {

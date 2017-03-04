@@ -1,10 +1,13 @@
 package ru.svetozarov.controllers.admin;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.UserDAOException;
 import ru.svetozarov.models.pojo.Admin;
 import org.apache.log4j.Logger;
 import ru.svetozarov.services.AdminService;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,13 +20,26 @@ import java.io.IOException;
  */
 public class AdminAccountServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(AddAutoServlet.class);
+
+    private AdminService adminService;
+    @Autowired
+    public void setAdminService(AdminService adminService) {
+        this.adminService = adminService;
+    }
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         HttpSession session = req.getSession(false);
         int id = (int) session.getAttribute("id");
             try {
-                Admin admin = AdminService.getAdminById(id);
+                Admin admin = adminService.getAdminById(id);
                 if (admin != null) {
                     req.setAttribute("admin", admin);
                     req.getRequestDispatcher("/admin/index.jsp").forward(req, resp);
