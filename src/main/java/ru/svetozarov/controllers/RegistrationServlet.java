@@ -60,7 +60,7 @@ public class RegistrationServlet extends HttpServlet {
         String password;
         try {
             password = hashPassword.hashingPassword(req.getParameter("password"));
-
+            logger.trace("sdasd");
             String role = "client";
             String greetings = "";
             Client client = new Client(
