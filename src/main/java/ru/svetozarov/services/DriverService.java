@@ -1,54 +1,65 @@
 package ru.svetozarov.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import ru.svetozarov.common.exception.DriverDAOException;
-import ru.svetozarov.models.dao.DriverDAO;
+import ru.svetozarov.models.dao.IDriverDAO;
 import ru.svetozarov.models.pojo.Driver;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * Created by Шмыга on 25.02.2017.
  */
-@Service
+@Service(value = "driverService")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class DriverService  {
+public class DriverService implements IDriverService {
 
-    private DriverDAO driverDAO;
+    private IDriverDAO IDriverDAO;
+    @Override
     @Autowired
-    public void setDriverDAO(DriverDAO driverDAO) {
-        this.driverDAO = driverDAO;
+    @Qualifier("driverDAO")
+    public void setDriverDAO(IDriverDAO IDriverDAO) {
+        this.IDriverDAO = IDriverDAO;
     }
 
+    @Override
     public  Driver getDriverByLoginAndPasswrod(String login, String password) throws DriverDAOException {
-        return driverDAO.getDriverByLoginAndPassword(login, password);
+        return IDriverDAO.getDriverByLoginAndPassword(login, password);
     }
 
+    @Override
     public  List<Driver> getListDriver() throws DriverDAOException {
-        return driverDAO.getListDriver();
+        return IDriverDAO.getListDriver();
     }
 
 
+    @Override
     public  boolean addDriver(Driver driver) throws DriverDAOException {
-        return driverDAO.addDriver(driver);
+        return IDriverDAO.addDriver(driver);
     }
 
+    @Override
     public  Driver getDriverById(int id) throws DriverDAOException {
-        return driverDAO.getDriverById(id);
+        return IDriverDAO.getDriverById(id);
     }
 
+    @Override
     public  boolean updateDriver(Driver driver) throws DriverDAOException {
-        return driverDAO.updateDriver(driver);
+        return IDriverDAO.updateDriver(driver);
     }
 
+    @Override
     public  boolean deleteDriverById(int id) throws DriverDAOException {
-        return driverDAO.deleteDriverById(id);
+        return IDriverDAO.deleteDriverById(id);
     }
 
+    @Override
     public  Driver getDriverByIdJoinAutoAndStatus(int id) throws DriverDAOException {
-        return driverDAO.getDriverByIdJoinAutoAndStatus(id);
+        return IDriverDAO.getDriverByIdJoinAutoAndStatus(id);
     }
 }

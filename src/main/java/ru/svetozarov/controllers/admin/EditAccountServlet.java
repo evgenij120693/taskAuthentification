@@ -1,11 +1,12 @@
 package ru.svetozarov.controllers.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.UserDAOException;
 import ru.svetozarov.models.pojo.Admin;
 import org.apache.log4j.Logger;
-import ru.svetozarov.services.AdminService;
+import ru.svetozarov.services.IAdminService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -21,10 +22,11 @@ import java.io.IOException;
 public class EditAccountServlet extends HttpServlet {
     public static Logger logger = Logger.getLogger(EditAccountServlet.class);
 
-    private AdminService adminService;
+    private IAdminService IAdminService;
     @Autowired
-    public void setAdminService(AdminService adminService) {
-        this.adminService = adminService;
+    @Qualifier("adminService")
+    public void setAdminService(IAdminService IAdminService) {
+        this.IAdminService = IAdminService;
     }
 
     @Override
@@ -40,7 +42,7 @@ public class EditAccountServlet extends HttpServlet {
         int id = (int) session.getAttribute("id");
         if (id != 0) {
             try {
-                Admin admin = adminService.getAdminById(id);
+                Admin admin = IAdminService.getAdminById(id);
                 if (admin != null) {
                     req.setAttribute("admin", admin);
                     req.getRequestDispatcher("/admin/edit_account.jsp").forward(req, resp);
@@ -68,7 +70,7 @@ public class EditAccountServlet extends HttpServlet {
         int flag = (req.getParameter("flag")!=null && req.getParameter("flag").equals("on"))
                 ?1:0;
         try {
-            Admin temp = adminService.getAdminById(id);
+            Admin temp = IAdminService.getAdminById(id);
             Admin admin = new Admin(
                     id,
                     temp.getLogin(),
@@ -78,7 +80,7 @@ public class EditAccountServlet extends HttpServlet {
                     flag
             );
 
-            if (adminService.updateAdmin(admin)) {
+            if (IAdminService.updateAdmin(admin)) {
                 logger.trace("Admin " + admin.getName() + " updated");
                 resp.sendRedirect("/taxi/admin");
             } else {

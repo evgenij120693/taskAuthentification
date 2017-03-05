@@ -1,11 +1,12 @@
 package ru.svetozarov.controllers.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.ClientDAOException;
 import ru.svetozarov.models.pojo.Client;
 import org.apache.log4j.Logger;
-import ru.svetozarov.services.ClientService;
+import ru.svetozarov.services.IClientService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -21,10 +22,11 @@ import java.io.IOException;
 public class EditClientServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(EditClientServlet.class);
 
-    private ClientService clientService;
+    private IClientService IClientService;
     @Autowired
-    public void setClientService(ClientService clientService) {
-        this.clientService = clientService;
+    @Qualifier("clientService")
+    public void setClientService(IClientService IClientService) {
+        this.IClientService = IClientService;
     }
 
     @Override
@@ -40,7 +42,7 @@ public class EditClientServlet extends HttpServlet {
         int id = (int) session.getAttribute("id");
         if (id != 0) {
             try {
-                Client client = clientService.getClientBiId(id);
+                Client client = IClientService.getClientBiId(id);
                 if (client != null) {
                     req.setAttribute("client", client);
                     req.getRequestDispatcher("/client/edit.jsp").forward(req, resp);
@@ -67,7 +69,7 @@ public class EditClientServlet extends HttpServlet {
         int id = (int) session.getAttribute("id");
 
         try {
-            Client temp = clientService.getClientBiId(id);
+            Client temp = IClientService.getClientBiId(id);
             Client client = new Client(
                     id,
                     req.getParameter("name"),
@@ -78,7 +80,7 @@ public class EditClientServlet extends HttpServlet {
                     req.getParameter("password")
             );
 
-            if (clientService.updateClient(client)) {
+            if (IClientService.updateClient(client)) {
                 logger.trace("Client " + client.getName() + " updated");
                 resp.sendRedirect("/taxi/client");
             } else {

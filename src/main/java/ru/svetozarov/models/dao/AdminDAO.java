@@ -1,6 +1,7 @@
 package ru.svetozarov.models.dao;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.svetozarov.common.exception.UserDAOException;
 import ru.svetozarov.common.exception.ConnectorException;
 import ru.svetozarov.models.connector.Connector;
@@ -15,8 +16,8 @@ import java.sql.SQLException;
 /**
  * Created by Шмыга on 24.02.2017.
  */
-@Component
-public class AdminDAO {
+@Repository(value = "adminDAO")
+public class AdminDAO implements IAdminDAO {
     private static Logger logger = Logger.getLogger(AdminDAO.class);
     private  final String SQL_FIND_USER = "Select * from taxi.admin where login = ? and password = ?";
     private  final String SQL_ADMIN_BY_LOGIN = "Select * from taxi.admin where login = ?";
@@ -29,6 +30,7 @@ public class AdminDAO {
     private  final String SQL_INSERT_USER = "Insert into taxi.admin (login, password, name)" +
             " values (?, ?, ?)";
 
+    @Override
     public  Admin getAdminByLoginAndPassword(String login, String password)
             throws UserDAOException {
         Admin admin = null;
@@ -79,6 +81,7 @@ public class AdminDAO {
         return true;
     }
 
+    @Override
     public  Admin getAdminById(int id) throws UserDAOException {
         Admin admin = null;
         try (Connection conn = Connector.getConnection();
@@ -106,6 +109,7 @@ public class AdminDAO {
         return admin;
     }
 
+    @Override
     public  boolean updateAdmin(Admin admin) throws UserDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(SQL_UPDATE_ADMIN);

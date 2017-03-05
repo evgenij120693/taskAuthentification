@@ -1,6 +1,7 @@
 package ru.svetozarov.models.dao;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.svetozarov.common.exception.ConnectorException;
 import ru.svetozarov.common.exception.UserDAOException;
 import ru.svetozarov.models.connector.Connector;
@@ -15,8 +16,8 @@ import java.sql.SQLException;
 /**
  * Created by Шмыга on 25.02.2017.
  */
-@Component
-public class UserDAO {
+@Repository(value = "userDAO")
+public class UserDAO implements IUserDAO {
 
     private static Logger logger = Logger.getLogger(UserDAO.class);
     private  final String QUERY_SELECT_ALL_BY_LOGIN = "select login, password from taxi.admin" +
@@ -35,6 +36,7 @@ public class UserDAO {
             "  union select id, login, password, first_name as 'name', 'driver' as role " +
             "from  taxi.driver where login=? and password=? ";
 
+    @Override
     public  boolean checkUserByLogin(String login) throws UserDAOException {
         try {
             try (Connection conn = Connector.getConnection();
@@ -60,6 +62,7 @@ public class UserDAO {
         return true;
     }
 
+    @Override
     public  boolean checkUserByLogin(String login, int id) throws UserDAOException {
         try {
             try (Connection conn = Connector.getConnection();
@@ -89,6 +92,7 @@ public class UserDAO {
         return true;
     }
 
+    @Override
     public  User getUserByLoginAndPassword(String login, String password) throws UserDAOException {
         User user = null;
         try (Connection conn = Connector.getConnection()) {

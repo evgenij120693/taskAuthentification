@@ -1,13 +1,14 @@
 package ru.svetozarov.controllers.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.ClientDAOException;
 import ru.svetozarov.common.exception.UserDAOException;
 import ru.svetozarov.models.pojo.Client;
 import org.apache.log4j.Logger;
-import ru.svetozarov.services.ClientService;
-import ru.svetozarov.services.UserService;
+import ru.svetozarov.services.IClientService;
+import ru.svetozarov.services.IUserService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -22,16 +23,18 @@ import java.io.IOException;
 public class AddClientServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(AddClientServlet.class);
 
-    private UserService userService;
+    private IUserService IUserService;
     @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    @Qualifier("userService")
+    public void setUserService(IUserService IUserService) {
+        this.IUserService = IUserService;
     }
 
-    private ClientService clientService;
+    private IClientService IClientService;
     @Autowired
-    public void setClientService(ClientService clientService) {
-        this.clientService = clientService;
+    @Qualifier("clientService")
+    public void setClientService(IClientService IClientService) {
+        this.IClientService = IClientService;
     }
 
     @Override
@@ -63,8 +66,8 @@ public class AddClientServlet extends HttpServlet {
         );
 
         try {
-            if (userService.checkUserByLogin(client.getLogin())) {
-                if (clientService.addClient(client)) {
+            if (IUserService.checkUserByLogin(client.getLogin())) {
+                if (IClientService.addClient(client)) {
                     logger.trace("Client " + client.getName() + " added");
                     resp.sendRedirect("/taxi/admin/list_client");
                 } else {

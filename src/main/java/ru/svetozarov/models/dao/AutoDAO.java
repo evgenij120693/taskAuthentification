@@ -1,6 +1,7 @@
 package ru.svetozarov.models.dao;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.svetozarov.common.exception.AutoDAOException;
 import ru.svetozarov.common.exception.ConnectorException;
 import ru.svetozarov.models.connector.Connector;
@@ -14,8 +15,8 @@ import java.util.List;
 /**
  * Created by Шмыга on 26.02.2017.
  */
-@Component
-public class AutoDAO {
+@Repository(value = "autoDAO")
+public class AutoDAO implements IAutoDAO {
     private static Logger logger = Logger.getLogger(AutoDAO.class);
     private  final String QUERY_SELECT_ALL_AUTO = "select * from taxi.auto";
     private  final String QUERY_SELECT_AUTO_BY_ID = "select * from taxi.auto WHERE id=?";
@@ -25,6 +26,7 @@ public class AutoDAO {
             "VALUE (?,?,?,?)";
     private  final String QUERY_DELETE_AUTO_BY_ID = "delete from taxi.auto where id=?";
 
+    @Override
     public  List<Auto> getAllAuto() throws AutoDAOException {
         List<Auto> list = new ArrayList<>();
         try (Connection conn = Connector.getConnection()) {
@@ -51,6 +53,7 @@ public class AutoDAO {
         return list;
     }
 
+    @Override
     public  Auto getAutoById(int id) throws AutoDAOException {
         Auto auto = null;
         try (Connection conn = Connector.getConnection()) {
@@ -79,6 +82,7 @@ public class AutoDAO {
         return auto;
     }
 
+    @Override
     public  boolean updateAuto(Auto auto) throws AutoDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(QUERY_UPDATE_AUTO);
@@ -104,6 +108,7 @@ public class AutoDAO {
         return false;
     }
 
+    @Override
     public  boolean addAuto(Auto auto) throws AutoDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(QUERY_ADD_AUTO);
@@ -128,6 +133,7 @@ public class AutoDAO {
         return false;
     }
 
+    @Override
     public  boolean deleteAutoById(int id) throws AutoDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement prepS = conn.prepareStatement(QUERY_DELETE_AUTO_BY_ID);

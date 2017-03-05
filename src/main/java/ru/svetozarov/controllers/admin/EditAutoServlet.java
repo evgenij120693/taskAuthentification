@@ -1,11 +1,12 @@
 package ru.svetozarov.controllers.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.AutoDAOException;
 import ru.svetozarov.models.pojo.Auto;
 import org.apache.log4j.Logger;
-import ru.svetozarov.services.AutoService;
+import ru.svetozarov.services.IAutoService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -20,10 +21,11 @@ import java.io.IOException;
 public class EditAutoServlet extends HttpServlet{
     private static Logger logger = Logger.getLogger(EditClientServlet.class);
 
-    private AutoService autoService;
+    private IAutoService IAutoService;
     @Autowired
-    public void setAutoService(AutoService autoService) {
-        this.autoService = autoService;
+    @Qualifier("autoService")
+    public void setAutoService(IAutoService IAutoService) {
+        this.IAutoService = IAutoService;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class EditAutoServlet extends HttpServlet{
         int id = (!req.getParameter("id").equals(""))? Integer.valueOf(req.getParameter("id")):0;
         if(id != 0){
             try {
-                Auto auto = autoService.getAutoById(id);
+                Auto auto = IAutoService.getAutoById(id);
                 if(auto != null){
                     req.setAttribute("auto", auto);
                     req.getRequestDispatcher("/admin/edit_auto.jsp").forward(req, resp);
@@ -68,7 +70,7 @@ public class EditAutoServlet extends HttpServlet{
                 req.getParameter("color")
         );
         try {
-            if(autoService.updateAuto(auto)){
+            if(IAutoService.updateAuto(auto)){
                 logger.trace("update successful ");
                 resp.sendRedirect("/taxi/admin/list_auto");
             }else{

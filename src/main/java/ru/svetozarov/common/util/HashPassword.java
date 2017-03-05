@@ -11,11 +11,12 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Created by Evgenij on 04.03.2017.
  */
-@Service
-public class HashPassword {
+@Service(value = "hashPassword")
+public class HashPassword implements IHashPassword {
     private static Logger logger = Logger.getLogger(HashPassword.class);
     private  final String salt = "lrufbaeqw,vxurdahj";
 
+    @Override
     public  String hashingPassword(String password) throws HashPasswordException {
         MessageDigest digest = null;
         String sha256hex;

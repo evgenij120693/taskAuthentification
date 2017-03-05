@@ -1,13 +1,14 @@
 package ru.svetozarov.controllers.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.ClientDAOException;
 import ru.svetozarov.common.exception.UserDAOException;
 import ru.svetozarov.models.pojo.Client;
 import org.apache.log4j.Logger;
-import ru.svetozarov.services.ClientService;
-import ru.svetozarov.services.UserService;
+import ru.svetozarov.services.IClientService;
+import ru.svetozarov.services.IUserService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -22,16 +23,18 @@ import java.io.IOException;
 public class EditClientServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(EditClientServlet.class);
 
-    private ClientService clientService;
+    private IClientService IClientService;
     @Autowired
-    public void setClientService(ClientService clientService) {
-        this.clientService = clientService;
+    @Qualifier("clientService")
+    public void setClientService(IClientService IClientService) {
+        this.IClientService = IClientService;
     }
 
-    private UserService userService;
+    private IUserService IUserService;
     @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    @Qualifier("userService")
+    public void setUserService(IUserService IUserService) {
+        this.IUserService = IUserService;
     }
 
     @Override
@@ -46,7 +49,7 @@ public class EditClientServlet extends HttpServlet {
         int id = (!req.getParameter("id").equals(""))? Integer.valueOf(req.getParameter("id")):0;
         if(id != 0){
             try {
-                Client client = clientService.getClientBiId(id);
+                Client client = IClientService.getClientBiId(id);
                 if(client != null){
                     req.setAttribute("client", client);
                     req.getRequestDispatcher("/admin/edit_client.jsp").forward(req, resp);
@@ -80,8 +83,8 @@ public class EditClientServlet extends HttpServlet {
                 req.getParameter("password")
         );
         try {
-            if (userService.checkUserByLoginAndId(client.getLogin(), client.getId())) {
-                if (clientService.updateClient(client)) {
+            if (IUserService.checkUserByLoginAndId(client.getLogin(), client.getId())) {
+                if (IClientService.updateClient(client)) {
                     logger.trace("Client " + client.getName() + " updated");
                     resp.sendRedirect("/taxi/admin/list_client");
                 } else {

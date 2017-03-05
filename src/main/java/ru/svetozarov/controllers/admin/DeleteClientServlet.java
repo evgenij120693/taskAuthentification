@@ -1,11 +1,11 @@
 package ru.svetozarov.controllers.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.ClientDAOException;
 import org.apache.log4j.Logger;
-import ru.svetozarov.models.dao.StatusDAO;
-import ru.svetozarov.services.ClientService;
+import ru.svetozarov.services.IClientService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -20,10 +20,11 @@ import java.io.IOException;
 public class DeleteClientServlet extends HttpServlet{
     private static Logger logger = Logger.getLogger(DeleteClientServlet.class);
 
-    private ClientService clientService;
+    private IClientService IClientService;
     @Autowired
-    public void setClientService(ClientService clientService) {
-        this.clientService = clientService;
+    @Qualifier("clientService")
+    public void setClientService(IClientService IClientService) {
+        this.IClientService = IClientService;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class DeleteClientServlet extends HttpServlet{
         int id = (req.getParameter("id") != null)? Integer.valueOf(req.getParameter("id")):0;
         if(id != 0){
             try {
-                if(clientService.deleteClientById(id)){
+                if(IClientService.deleteClientById(id)){
                     resp.sendRedirect("/taxi/admin/list_client");
                 }
             } catch (ClientDAOException e) {

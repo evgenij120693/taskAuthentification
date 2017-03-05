@@ -1,11 +1,12 @@
 package ru.svetozarov.controllers.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.AutoDAOException;
 import ru.svetozarov.models.pojo.Auto;
 import org.apache.log4j.Logger;
-import ru.svetozarov.services.AutoService;
+import ru.svetozarov.services.IAutoService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -20,10 +21,11 @@ import java.io.IOException;
 public class AddAutoServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(AddAutoServlet.class);
 
-    private AutoService autoService;
+    private IAutoService IAutoService;
     @Autowired
-    public void setAutoService(AutoService autoService) {
-        this.autoService = autoService;
+    @Qualifier("autoService")
+    public void setAutoService(IAutoService IAutoService) {
+        this.IAutoService = IAutoService;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class AddAutoServlet extends HttpServlet {
                 req.getParameter("color")
         );
         try {
-            if(autoService.addAuto(auto)){
+            if(IAutoService.addAuto(auto)){
                 logger.trace("adding successful ");
                 resp.sendRedirect("/taxi/admin/list_auto");
             }else{

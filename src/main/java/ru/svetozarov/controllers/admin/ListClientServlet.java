@@ -1,12 +1,13 @@
 package ru.svetozarov.controllers.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.ClientDAOException;
 import ru.svetozarov.controllers.LoginServlet;
 import ru.svetozarov.models.pojo.Client;
 import org.apache.log4j.Logger;
-import ru.svetozarov.services.ClientService;
+import ru.svetozarov.services.IClientService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -22,10 +23,11 @@ import java.util.List;
 public class ListClientServlet extends HttpServlet{
     private static Logger logger = Logger.getLogger(LoginServlet.class);
 
-    private ClientService clientService;
+    private IClientService IClientService;
     @Autowired
-    public void setClientService(ClientService clientService) {
-        this.clientService = clientService;
+    @Qualifier("clientService")
+    public void setClientService(IClientService IClientService) {
+        this.IClientService = IClientService;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class ListClientServlet extends HttpServlet{
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
 
-            List<Client> list = clientService.getAllClients();
+            List<Client> list = IClientService.getAllClients();
             req.setAttribute("list", list);
             req.getRequestDispatcher("/admin/list_client.jsp").forward(req, resp);
         } catch (ClientDAOException e) {

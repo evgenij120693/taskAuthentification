@@ -1,13 +1,12 @@
 package ru.svetozarov.controllers.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.DriverDAOException;
 import ru.svetozarov.models.pojo.Driver;
 import org.apache.log4j.Logger;
-import ru.svetozarov.services.AutoService;
-import ru.svetozarov.services.DriverService;
-import ru.svetozarov.services.StatusService;
+import ru.svetozarov.services.IDriverService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -23,10 +22,11 @@ import java.util.List;
 public class ListDriverServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(ListDriverServlet.class);
 
-    private DriverService driverService;
+    private IDriverService IDriverService;
     @Autowired
-    public void setDriverService(DriverService driverService) {
-        this.driverService = driverService;
+    @Qualifier("driverService")
+    public void setDriverService(IDriverService IDriverService) {
+        this.IDriverService = IDriverService;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ListDriverServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            List<Driver> list = driverService.getListDriver();
+            List<Driver> list = IDriverService.getListDriver();
            /* List<Auto> listAuto = AutoService.getAllAuto();
             List<Status> statusList = StatusService.getAllStatusDriver();*/
             req.setAttribute("list", list);

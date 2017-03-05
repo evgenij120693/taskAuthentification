@@ -1,6 +1,7 @@
 package ru.svetozarov.models.dao;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.svetozarov.common.exception.ClientDAOException;
 import ru.svetozarov.common.exception.ConnectorException;
 import ru.svetozarov.models.connector.Connector;
@@ -14,8 +15,8 @@ import java.util.List;
 /**
  * Created by Шмыга on 25.02.2017.
  */
-@Component
-public class ClientDAO {
+@Repository(value = "clientDAO")
+public class ClientDAO implements IClientDAO {
     private static Logger logger = Logger.getLogger(ClientDAO.class);
     private  final String QUERY_SELECT_ALL = "select * from taxi.client";
     private  final String QUERY_SELECT_CLIENT_BY_LOGIN_AND_PASSWORD = "select * from taxi.client " +
@@ -27,6 +28,7 @@ public class ClientDAO {
             "email=?, login=?, password=? where id=?";
     private  final String QUERY_DELETE_CLIENT = "delete from taxi.client where id=?";
 
+    @Override
     public  List<Client> getAllClient() throws ClientDAOException {
         List<Client> list = new ArrayList<>();
         try (Connection conn = Connector.getConnection()) {
@@ -55,6 +57,7 @@ public class ClientDAO {
         return list;
     }
 
+    @Override
     public  boolean addClient(Client client) throws ClientDAOException {
 
         try (Connection conn = Connector.getConnection()) {
@@ -83,6 +86,7 @@ public class ClientDAO {
         return false;
     }
 
+    @Override
     public  Client getClientByLoginAndPassword(String login, String password) throws ClientDAOException {
         Client client = null;
 
@@ -116,6 +120,7 @@ public class ClientDAO {
         return client;
     }
 
+    @Override
     public  Client getClientById(int id) throws ClientDAOException {
         Client client = null;
 
@@ -145,6 +150,7 @@ public class ClientDAO {
         return client;
     }
 
+    @Override
     public  boolean updateClient(Client client) throws ClientDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = null;
@@ -173,6 +179,7 @@ public class ClientDAO {
         return false;
     }
 
+    @Override
     public  boolean deleteClientById(int id) throws ClientDAOException {
 
         try (Connection conn = Connector.getConnection()) {
