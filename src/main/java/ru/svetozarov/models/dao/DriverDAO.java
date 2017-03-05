@@ -1,6 +1,7 @@
 package ru.svetozarov.models.dao;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.svetozarov.common.exception.ConnectorException;
 import ru.svetozarov.common.exception.DriverDAOException;
 import ru.svetozarov.models.connector.Connector;
@@ -16,8 +17,8 @@ import java.util.List;
 /**
  * Created by Шмыга on 25.02.2017.
  */
-@Component
-public class DriverDAO {
+@Repository(value = "driverDAO")
+public class DriverDAO implements IDriverDAO {
 
     private static Logger logger = Logger.getLogger(DriverDAO.class);
 
@@ -38,6 +39,7 @@ public class DriverDAO {
             " where dr.id=?";
     private  final String QUERY_DELETE_DRIVER_BY_ID = "delete from taxi.driver where id=?";
 
+    @Override
     public  Driver getDriverByLoginAndPassword(String login, String password) throws DriverDAOException {
         Driver driver = null;
 
@@ -73,6 +75,7 @@ public class DriverDAO {
         return driver;
     }
 
+    @Override
     public  List<Driver> getListDriver() throws DriverDAOException {
         List<Driver> list = new ArrayList<>();
         try (Connection conn = Connector.getConnection()) {
@@ -113,6 +116,7 @@ public class DriverDAO {
         return list;
     }
 
+    @Override
     public  boolean addDriver(Driver driver) throws DriverDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = null;
@@ -142,6 +146,7 @@ public class DriverDAO {
         return false;
     }
 
+    @Override
     public  Driver getDriverById(int id) throws DriverDAOException {
         Driver driver = null;
         byte tr[]= new byte[200];
@@ -176,6 +181,7 @@ public class DriverDAO {
         return driver;
     }
 
+    @Override
     public  Driver getDriverByIdJoinAutoAndStatus(int id) throws DriverDAOException {
         Driver driver = null;
         try (Connection conn = Connector.getConnection()) {
@@ -218,6 +224,7 @@ public class DriverDAO {
         return driver;
     }
 
+    @Override
     public  boolean updateDriver(Driver driver) throws DriverDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = null;
@@ -249,6 +256,7 @@ public class DriverDAO {
         return false;
     }
 
+    @Override
     public  boolean deleteDriverById(int id) throws DriverDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement prepS = conn.prepareStatement(QUERY_DELETE_DRIVER_BY_ID);

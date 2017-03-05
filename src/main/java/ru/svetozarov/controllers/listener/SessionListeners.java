@@ -1,9 +1,10 @@
 package ru.svetozarov.controllers.listener;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import ru.svetozarov.common.exception.UserDAOException;
-import ru.svetozarov.common.util.SenderMail;
-import ru.svetozarov.models.dao.AdminDAO;
+import ru.svetozarov.common.util.ISenderMail;
+import ru.svetozarov.models.dao.IAdminDAO;
 import ru.svetozarov.models.pojo.Admin;
 import org.apache.log4j.Logger;
 
@@ -19,16 +20,18 @@ public class SessionListeners implements HttpSessionListener, HttpSessionAttribu
 
     private static Logger logger = Logger.getLogger(SessionListeners.class);
     private int id;
-    private AdminDAO adminDAO;
-    private SenderMail senderMail;
+    private IAdminDAO IAdminDAO;
+    private ISenderMail ISenderMail;
     @Autowired
-    public void setSenderMail(SenderMail senderMail) {
-        this.senderMail = senderMail;
+    @Qualifier("senderMail")
+    public void setSenderMail(ISenderMail ISenderMail) {
+        this.ISenderMail = ISenderMail;
     }
 
     @Autowired
-    public void setAdminDAO(AdminDAO adminDAO) {
-        this.adminDAO = adminDAO;
+    @Qualifier("adminDAO")
+    public void setAdminDAO(IAdminDAO IAdminDAO) {
+        this.IAdminDAO = IAdminDAO;
     }
 
     @Override
@@ -40,9 +43,9 @@ public class SessionListeners implements HttpSessionListener, HttpSessionAttribu
         if (event.getName().equals("role") && event.getValue().equals("admin")) {
             try {
                 logger.trace("send messag");
-                Admin admin = adminDAO.getAdminById((Integer) id);
+                Admin admin = IAdminDAO.getAdminById((Integer) id);
                 if (admin.getSendEmailFlag() != 0) {
-                    senderMail.sendMail(admin.getEmail(), "Авторизация в системе 'Такси онлайн'",
+                    ISenderMail.sendMail(admin.getEmail(), "Авторизация в системе 'Такси онлайн'",
                             "Вы авторизовались в системе");
                 }
             } catch (UserDAOException e) {

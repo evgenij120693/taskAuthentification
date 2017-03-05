@@ -1,11 +1,12 @@
 package ru.svetozarov.controllers.driver;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.OrderDAOException;
 import ru.svetozarov.models.pojo.Order;
 import org.apache.log4j.Logger;
-import ru.svetozarov.services.OrderService;
+import ru.svetozarov.services.IOrderService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -22,10 +23,11 @@ import java.sql.Timestamp;
 public class ExecuteOrderServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(ExecuteOrderServlet.class);
 
-    private OrderService orderService;
+    private IOrderService IOrderService;
     @Autowired
-    public void setOrderService(OrderService orderService) {
-        this.orderService = orderService;
+    @Qualifier("orderService")
+    public void setOrderService(IOrderService IOrderService) {
+        this.IOrderService = IOrderService;
     }
 
     @Override
@@ -55,7 +57,7 @@ public class ExecuteOrderServlet extends HttpServlet {
                     4
             );
             try {
-                if (orderService.updateOrderOfDriver(order)) {
+                if (IOrderService.updateOrderOfDriver(order)) {
                     logger.trace("Update successful");
                     resp.sendRedirect("/taxi/driver/list_new_order");
                 }else{

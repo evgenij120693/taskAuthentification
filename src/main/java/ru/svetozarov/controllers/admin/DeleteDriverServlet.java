@@ -1,10 +1,11 @@
 package ru.svetozarov.controllers.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.DriverDAOException;
 import org.apache.log4j.Logger;
-import ru.svetozarov.services.DriverService;
+import ru.svetozarov.services.IDriverService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -19,10 +20,11 @@ import java.io.IOException;
 public class DeleteDriverServlet extends HttpServlet{
     private static Logger logger = Logger.getLogger(DeleteDriverServlet.class);
 
-    private DriverService driverService;
+    private IDriverService IDriverService;
     @Autowired
-    public void setDriverService(DriverService driverService) {
-        this.driverService = driverService;
+    @Qualifier("driverService")
+    public void setDriverService(IDriverService IDriverService) {
+        this.IDriverService = IDriverService;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class DeleteDriverServlet extends HttpServlet{
         int id = (!req.getParameter("id").equals("") ) ? Integer.valueOf(req.getParameter("id")) : 0;
         if(id != 0){
             try {
-                driverService.deleteDriverById(id);
+                IDriverService.deleteDriverById(id);
                 logger.trace("delete driver by id="+id+" successfull");
                 resp.sendRedirect("/taxi/admin/list_driver");
             } catch (DriverDAOException e) {

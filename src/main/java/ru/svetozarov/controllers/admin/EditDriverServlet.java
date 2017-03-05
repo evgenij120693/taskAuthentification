@@ -1,6 +1,7 @@
 package ru.svetozarov.controllers.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.AutoDAOException;
 import ru.svetozarov.common.exception.DriverDAOException;
@@ -8,9 +9,9 @@ import ru.svetozarov.common.exception.UserDAOException;
 import ru.svetozarov.models.pojo.Auto;
 import ru.svetozarov.models.pojo.Driver;
 import org.apache.log4j.Logger;
-import ru.svetozarov.services.AutoService;
-import ru.svetozarov.services.DriverService;
-import ru.svetozarov.services.UserService;
+import ru.svetozarov.services.IAutoService;
+import ru.svetozarov.services.IDriverService;
+import ru.svetozarov.services.IUserService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -26,22 +27,25 @@ import java.util.List;
 public class EditDriverServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(EditDriverServlet.class);
 
-    private DriverService driverService;
-    private AutoService autoService;
+    private IDriverService IDriverService;
+    private IAutoService IAutoService;
     @Autowired
-    public void setAutoService(AutoService autoService) {
-        this.autoService = autoService;
+    @Qualifier("autoService")
+    public void setAutoService(IAutoService IAutoService) {
+        this.IAutoService = IAutoService;
     }
 
     @Autowired
-    public void setDriverService(DriverService driverService) {
-        this.driverService = driverService;
+    @Qualifier("driverService")
+    public void setDriverService(IDriverService IDriverService) {
+        this.IDriverService = IDriverService;
     }
 
-    private UserService userService;
+    private IUserService IUserService;
     @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    @Qualifier("userService")
+    public void setUserService(IUserService IUserService) {
+        this.IUserService = IUserService;
     }
 
     @Override
@@ -55,8 +59,8 @@ public class EditDriverServlet extends HttpServlet {
         logger.trace(req.getParameter("id"));
         int id = (!req.getParameter("id").equals("") ) ? Integer.valueOf(req.getParameter("id")) : 0;
         try {
-            Driver driver = driverService.getDriverById(id);
-            List<Auto> autoList = autoService.getAllAuto();
+            Driver driver = IDriverService.getDriverById(id);
+            List<Auto> autoList = IAutoService.getAllAuto();
             if (driver != null) {
                 logger.trace("Get Driver by id=" + id);
                 req.setAttribute("driver", driver);
@@ -92,8 +96,8 @@ public class EditDriverServlet extends HttpServlet {
                     auto,
                     1
             );
-                if(userService.checkUserByLoginAndId(req.getParameter("login"), id)) {
-                    if(driverService.updateDriver(driver)) {
+                if(IUserService.checkUserByLoginAndId(req.getParameter("login"), id)) {
+                    if(IDriverService.updateDriver(driver)) {
                         logger.trace("Edit Driver by id=" + id);
                         resp.sendRedirect("/taxi/admin/list_driver");
                     }else{

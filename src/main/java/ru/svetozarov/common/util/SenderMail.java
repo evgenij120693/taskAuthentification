@@ -13,9 +13,8 @@ import java.util.Properties;
 /**
  * Created by Шмыга on 27.02.2017.
  */
-@Service
-
-public class SenderMail {
+@Service(value = "sendMail")
+public class SenderMail implements ISenderMail {
     private static Logger logger = Logger.getLogger(SenderMail.class);
     private  String username = "evgenij.svetozarov@yandex.ru";
     private   String password = "utugub39";
@@ -26,6 +25,7 @@ public class SenderMail {
      * @param subject - тема письма
      * @param text - текст письма
      */
+    @Override
     public   void sendMail(String email, String subject, String text) {
         Properties props = new Properties();
         props.put("mail.smtp.host","smtp.yandex.ru" );

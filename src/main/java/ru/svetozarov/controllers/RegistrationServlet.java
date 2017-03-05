@@ -1,15 +1,16 @@
 package ru.svetozarov.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.ClientDAOException;
 import ru.svetozarov.common.exception.HashPasswordException;
 import ru.svetozarov.common.exception.UserDAOException;
-import ru.svetozarov.common.util.HashPassword;
+import ru.svetozarov.common.util.IHashPassword;
 import ru.svetozarov.models.pojo.Client;
 import org.apache.log4j.Logger;
-import ru.svetozarov.services.ClientService;
-import ru.svetozarov.services.UserService;
+import ru.svetozarov.services.IClientService;
+import ru.svetozarov.services.IUserService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -24,22 +25,25 @@ import java.io.IOException;
 public class RegistrationServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(RegistrationServlet.class);
 
-    private ClientService clientService;
+    private IClientService IClientService;
     @Autowired
-    public void setClientService(ClientService clientService) {
-        this.clientService = clientService;
+    @Qualifier("clientService")
+    public void setClientService(IClientService IClientService) {
+        this.IClientService = IClientService;
     }
 
-    private HashPassword hashPassword;
+    private IHashPassword IHashPassword;
     @Autowired
-    public void setHashPassword(HashPassword hashPassword) {
-        this.hashPassword = hashPassword;
+    @Qualifier("hashPassword")
+    public void setHashPassword(IHashPassword IHashPassword) {
+        this.IHashPassword = IHashPassword;
     }
 
-    private UserService userService;
+    private IUserService IUserService;
     @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    @Qualifier("userService")
+    public void setUserService(IUserService IUserService) {
+        this.IUserService = IUserService;
     }
 
     @Override
@@ -59,7 +63,7 @@ public class RegistrationServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password;
         try {
-            password = hashPassword.hashingPassword(req.getParameter("password"));
+            password = IHashPassword.hashingPassword(req.getParameter("password"));
             logger.trace("sdasd");
             String role = "client";
             String greetings = "";
@@ -74,8 +78,8 @@ public class RegistrationServlet extends HttpServlet {
             );
 
 
-            if (userService.checkUserByLogin(client.getLogin())) {
-                if (clientService.addClient(client)) {
+            if (IUserService.checkUserByLogin(client.getLogin())) {
+                if (IClientService.addClient(client)) {
                     logger.trace("Client " + client.getName() + " added");
                     resp.sendRedirect("/taxi/login");
                 } else {

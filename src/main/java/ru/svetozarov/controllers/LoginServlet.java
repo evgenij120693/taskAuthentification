@@ -1,16 +1,14 @@
 package ru.svetozarov.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.HashPasswordException;
 import ru.svetozarov.common.exception.UserDAOException;
-import ru.svetozarov.common.util.HashPassword;
+import ru.svetozarov.common.util.IHashPassword;
 import ru.svetozarov.models.pojo.User;
 import org.apache.log4j.Logger;
-import ru.svetozarov.services.AdminService;
-import ru.svetozarov.services.ClientService;
-import ru.svetozarov.services.DriverService;
-import ru.svetozarov.services.UserService;
+import ru.svetozarov.services.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -24,16 +22,18 @@ import java.io.IOException;
  * Created by Шмыга on 24.02.2017.
  */
 public class LoginServlet extends HttpServlet {
-    private UserService userService;
-    private HashPassword hashPassword;
+    private IUserService IUserService;
+    private IHashPassword IHashPassword;
     @Autowired
-    public void setHashPassword(HashPassword hashPassword) {
-        this.hashPassword = hashPassword;
+    @Qualifier("hashPassword")
+    public void setHashPassword(IHashPassword IHashPassword) {
+        this.IHashPassword = IHashPassword;
     }
 
     @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    @Qualifier("userService")
+    public void setUserService(IUserService IUserService) {
+        this.IUserService = IUserService;
     }
 
     private static Logger logger = Logger.getLogger(LoginServlet.class);
@@ -58,7 +58,7 @@ public class LoginServlet extends HttpServlet {
         int id = 0;
         try {
             User user = null;
-                user = userService.getUserByLoginAndPassword(login, hashPassword.hashingPassword(password));
+                user = IUserService.getUserByLoginAndPassword(login, IHashPassword.hashingPassword(password));
 
             if (user != null) {
                 setSession(user.getId(), user.getRole(), user.getName(), req);

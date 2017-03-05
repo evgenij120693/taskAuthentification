@@ -1,12 +1,14 @@
 package ru.svetozarov.models.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 import ru.svetozarov.common.exception.*;
 import ru.svetozarov.models.connector.Connector;
 import ru.svetozarov.models.pojo.Order;
 import org.apache.log4j.Logger;
 
+import javax.annotation.Resource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,24 +16,30 @@ import java.util.List;
 /**
  * Created by Шмыга on 01.03.2017.
  */
-@Component
-public class OrderDAO {
+@Repository(value = "orderDAO")
+public class OrderDAO implements IOrderDAO {
 
 
-    private StatusDAO statusDAO;
-    private DriverDAO driverDAO;
-    private ClientDAO clientDAO;
+    private IStatusDAO IStatusDAO;
+    private IDriverDAO IDriverDAO;
+    private IClientDAO IClientDAO;
+    @Override
     @Autowired
-    public void setStatusDAO(StatusDAO statusDAO) {
-        this.statusDAO = statusDAO;
+    @Qualifier("statusDAO")
+    public void setStatusDAO(IStatusDAO IStatusDAO) {
+        this.IStatusDAO = IStatusDAO;
     }
+    @Override
     @Autowired
-    public void setDriverDAO(DriverDAO driverDAO) {
-        this.driverDAO = driverDAO;
+    @Qualifier("driverDAO")
+    public void setDriverDAO(IDriverDAO IDriverDAO) {
+        this.IDriverDAO = IDriverDAO;
     }
+    @Override
     @Autowired
-    public void setClientDAO(ClientDAO clientDAO) {
-        this.clientDAO = clientDAO;
+    @Qualifier("clientDAO")
+    public void setClientDAO(IClientDAO IClientDAO) {
+        this.IClientDAO = IClientDAO;
     }
 
     public static Logger logger = Logger.getLogger(OrderDAO.class);
@@ -50,6 +58,7 @@ public class OrderDAO {
     public  final String SQL_SELECT_HISTORY_ORDER_BY_CLIENT = "select * from taxi.order where id_client=? " +
             "and id_status<>1";
 
+    @Override
     public  boolean addOrder(Order order) throws OrderDAOException {
         try (Connection conn = Connector.getConnection();
              PreparedStatement statement = conn.prepareStatement(SQL_ADD_ORDER)) {
@@ -81,6 +90,7 @@ public class OrderDAO {
     }
 
 
+    @Override
     public  List<Order> getListOrderByDriverAndStatus(int id_driver, int id_status) throws OrderDAOException {
         List<Order> list = new ArrayList<>();
         try (Connection conn = Connector.getConnection()) {
@@ -93,15 +103,15 @@ public class OrderDAO {
                 try {
                     order = new Order(
                             result.getInt(1),
-                            clientDAO.getClientById(result.getInt(2)),
+                            IClientDAO.getClientById(result.getInt(2)),
                             result.getString(3),
                             result.getString(4),
                             result.getString(5),
                             result.getInt(6),
-                            driverDAO.getDriverById(result.getInt(7)),
+                            IDriverDAO.getDriverById(result.getInt(7)),
                             result.getString(8),
                             result.getString(9),
-                            statusDAO.getStatusOrderById(result.getInt(10))
+                            IStatusDAO.getStatusOrderById(result.getInt(10))
                     );
                 } catch (ClientDAOException e) {
                     logger.error(e);
@@ -126,6 +136,7 @@ public class OrderDAO {
         return list;
     }
 
+    @Override
     public  List<Order> getListOrderHistoryByClient(int id_client) throws OrderDAOException {
         List<Order> list = new ArrayList<>();
         try (Connection conn = Connector.getConnection()) {
@@ -137,15 +148,15 @@ public class OrderDAO {
                 try {
                     order = new Order(
                             result.getInt(1),
-                            clientDAO.getClientById(result.getInt(2)),
+                            IClientDAO.getClientById(result.getInt(2)),
                             result.getString(3),
                             result.getString(4),
                             result.getString(5),
                             result.getInt(6),
-                            driverDAO.getDriverById(result.getInt(7)),
+                            IDriverDAO.getDriverById(result.getInt(7)),
                             result.getString(8),
                             result.getString(9),
-                            statusDAO.getStatusOrderById(result.getInt(10))
+                            IStatusDAO.getStatusOrderById(result.getInt(10))
                     );
                 } catch (ClientDAOException e) {
                     logger.error(e);
@@ -170,6 +181,7 @@ public class OrderDAO {
         return list;
     }
 
+    @Override
     public  Order getListOrderActualByClient(int id_client) throws OrderDAOException {
        Order order = null;
         try (Connection conn = Connector.getConnection()) {
@@ -181,15 +193,15 @@ public class OrderDAO {
                     logger.trace("select order by client successfull");
                     order = new Order(
                             result.getInt(1),
-                            clientDAO.getClientById(result.getInt(2)),
+                            IClientDAO.getClientById(result.getInt(2)),
                             result.getString(3),
                             result.getString(4),
                             result.getString(5),
                             result.getInt(6),
-                            driverDAO.getDriverById(result.getInt(7)),
+                            IDriverDAO.getDriverById(result.getInt(7)),
                             result.getString(8),
                             result.getString(9),
-                            statusDAO.getStatusOrderById(result.getInt(10))
+                            IStatusDAO.getStatusOrderById(result.getInt(10))
                     );
                 } catch (ClientDAOException e) {
                     logger.error(e);
@@ -215,6 +227,7 @@ public class OrderDAO {
 
 
 
+    @Override
     public  boolean updateOrderClient(Order order) throws OrderDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(SQL_UPDATE_ORDER_OF_DRIVER);

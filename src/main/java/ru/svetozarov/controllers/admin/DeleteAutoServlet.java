@@ -1,10 +1,11 @@
 package ru.svetozarov.controllers.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.AutoDAOException;
 import org.apache.log4j.Logger;
-import ru.svetozarov.services.AutoService;
+import ru.svetozarov.services.IAutoService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -19,10 +20,11 @@ import java.io.IOException;
 public class DeleteAutoServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(DeleteAutoServlet.class);
 
-    private AutoService autoService;
+    private IAutoService IAutoService;
     @Autowired
-    public void setAutoService(AutoService autoService) {
-        this.autoService = autoService;
+    @Qualifier("autoService")
+    public void setAutoService(IAutoService IAutoService) {
+        this.IAutoService = IAutoService;
     }
 
     @Override
@@ -37,7 +39,7 @@ public class DeleteAutoServlet extends HttpServlet {
         int id = (req.getParameter("id") != null)? Integer.valueOf(req.getParameter("id")):0;
         if(id != 0){
             try {
-                if(autoService.deleteAuto(id)){
+                if(IAutoService.deleteAuto(id)){
                     logger.trace("Delete auto by id="+id+" successful");
                     resp.sendRedirect("/taxi/admin/list_auto");
                 }else{

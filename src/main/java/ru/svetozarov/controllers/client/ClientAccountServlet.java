@@ -1,11 +1,12 @@
 package ru.svetozarov.controllers.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.ClientDAOException;
 import ru.svetozarov.models.pojo.Client;
 import org.apache.log4j.Logger;
-import ru.svetozarov.services.ClientService;
+import ru.svetozarov.services.IClientService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -22,10 +23,11 @@ public class ClientAccountServlet  extends HttpServlet {
 
     private static Logger logger = Logger.getLogger(ClientAccountServlet.class);
 
-    private ClientService clientService;
+    private IClientService IClientService;
     @Autowired
-    public void setClientService(ClientService clientService) {
-        this.clientService = clientService;
+    @Qualifier("clientService")
+    public void setClientService(IClientService IClientService) {
+        this.IClientService = IClientService;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class ClientAccountServlet  extends HttpServlet {
         int id = (int) session.getAttribute("id");
         if (id != 0) {
             try {
-                Client client = clientService.getClientBiId(id);
+                Client client = IClientService.getClientBiId(id);
                 if (client != null) {
                     req.setAttribute("client", client);
                     req.getRequestDispatcher("/client/index.jsp").forward(req, resp);
