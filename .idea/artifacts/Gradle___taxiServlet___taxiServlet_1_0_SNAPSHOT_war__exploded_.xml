@@ -32,6 +32,8 @@
           <element id="library" level="project" name="Gradle: org.springframework:spring-core:4.3.5.RELEASE" />
           <element id="library" level="project" name="Gradle: org.springframework:spring-expression:4.3.5.RELEASE" />
           <element id="library" level="project" name="Gradle: commons-logging:commons-logging:1.2" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.webjars/bootstrap/3.2.0/aadbf822539bc170014701382cff887094c4c3df/bootstrap-3.2.0.jar" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.webjars/jquery/1.11.1/195eda53ac8beba7bff08f9919b48c954c858590/jquery-1.11.1.jar" />
         </element>
       </element>
     </root>

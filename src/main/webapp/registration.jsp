@@ -11,14 +11,7 @@
 
 
 <body>
-<%
-    String error = (String) request.getAttribute("error");
-    if (error != null) {
-%>
-<div class="row medium-4 large-3 alert callout">
-    <%=error%>
-</div>
-<%}%>
+
 
 <div class="container">
     <div class=" row col-md-6">
@@ -70,7 +63,16 @@
                         <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
                     </div>
                 </div>
+                <%
+                    String error = (String) request.getAttribute("error");
+                    if (error != null) {
+                %>
+                <div class="alert alert-danger " style="margin-top: 20px;">
+                    <%=error%>
+                </div>
+                <%}%>
             </fieldset>
+
         </form>
     </div>
 </div>

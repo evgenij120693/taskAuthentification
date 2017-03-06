@@ -1,11 +1,16 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
+    <spring:url value="/css/bootstrap/bootstrap.css" var="bootstrap"/>
+    <spring:url value="/css/bootstrap/bootstrap-responsive.css" var="bootstrap_responsive"/>
+    <spring:url value="/css/app.css" var="app"/>
     <title><% %></title>
-    <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
-    <link href="css/bootstrap/bootstrap-responsive.css" rel="stylesheet">
-    <link href="css/app.css" rel="stylesheet">
+    <link href="${bootstrap}" rel="stylesheet"/>
+    <link href="${bootstrap_responsive}" rel="stylesheet"/>
+    <link href="${app}" rel="stylesheet"/>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="js/bootstrap/bootstrap.min.js"></script>
 
