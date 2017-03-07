@@ -26,7 +26,7 @@
         </tr>
         <tr>
             <td>Пароль</td>
-            <td><input type="text" required class="form-control" name="password" value="<%=client.getPassword()%>"></td>
+            <td><input type="password" required class="form-control" name="password" value="123*/_$"></td>
         </tr>
         <tr>
             <td>ФИО</td>

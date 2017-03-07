@@ -22,13 +22,15 @@
     <!-- Resolves views selected for rendering by @Controllers to .jsp resources
         in the /WEB-INF/views directory -->
     <bean
-            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+            class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+        <property name="contentType" value="UTF-8"/>
         <property name="prefix" value="/" />
         <property name="suffix" value=".jsp" />
     </bean>
 
-    <mvc:resources mapping="/css/**" location="/css/" />
-    <mvc:resources mapping="/js/**" location="/js/" />
+    <!--<mvc:resources mapping="/css/**" location="/css/" />-->
+    <mvc:resources mapping="/css/**" location="/css/"/>
+
 
 
 

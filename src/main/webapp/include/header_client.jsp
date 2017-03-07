@@ -15,7 +15,6 @@
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="//localhost:8080/taxi/js/client/calculation_price.js"></script>
     <script src="//localhost:8080/taxi/js/bootstrap/bootstrap.min.js"></script>
-
 </head>
 <body>
 

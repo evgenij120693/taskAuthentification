@@ -26,7 +26,7 @@
         </tr>
         <tr>
             <td>Пароль</td>
-            <td><input type="password" class="form-control" name="password" value="1234"></td>
+            <td><input type="password" class="form-control" name="password" value="1*+234"></td>
         </tr>
         <tr>
             <td>Имя</td>

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import ru.svetozarov.common.exception.HashPasswordException;
 import ru.svetozarov.common.exception.UserDAOException;
 import ru.svetozarov.models.pojo.Admin;
 import ru.svetozarov.services.IAdminService;
@@ -22,6 +23,16 @@ import java.io.UnsupportedEncodingException;
 @Controller
 public class EditAccountController {
     private static Logger logger = Logger.getLogger(EditAccountController.class);
+
+
+
+    private ru.svetozarov.common.util.IHashPassword IHashPassword;
+
+    @Autowired
+    @Qualifier("hashPassword")
+    public void setHashPassword(ru.svetozarov.common.util.IHashPassword IHashPassword) {
+        this.IHashPassword = IHashPassword;
+    }
 
     private ru.svetozarov.services.IAdminService IAdminService;
     @Autowired
@@ -64,20 +75,23 @@ public class EditAccountController {
     public ModelAndView editPost(HttpServletRequest req,
                                  @RequestParam(name = "name") String name,
                                  @RequestParam(name = "email") String email,
-                                 @RequestParam(name = "flag", defaultValue = "0") String flag){
+                                 @RequestParam(name = "flag", defaultValue = "0") String flag,
+                                 @RequestParam(name = "password") String password){
         ModelAndView modelAndView = new ModelAndView();
-        String role = "client";
-        String greetings = "";
         HttpSession session = req.getSession(false);
         int id = (int) session.getAttribute("id");
         int flagInt = (flag!=null && flag.equals("on"))
                 ?1:0;
         try {
             Admin temp = IAdminService.getAdminById(id);
+            String hashPassword;
+            if(password.equals("1*/-*/32")){
+               hashPassword = temp.getPassword();
+            }else  hashPassword = IHashPassword.hashingPassword(password);
             Admin admin = new Admin(
                     id,
                     temp.getLogin(),
-                    temp.getPassword(),
+                    hashPassword,
                     name,
                     email,
                     flagInt
@@ -90,6 +104,9 @@ public class EditAccountController {
                 logger.trace("Error update client");
                 modelAndView.setViewName("redirect:/admin");
             }
+        }catch (HashPasswordException e) {
+            logger.error(e);
+            modelAndView.setViewName("redirect:/error.jsp");
         } catch (UserDAOException e) {
             logger.error(e);
             modelAndView.setViewName("redirect:/error.jsp");
