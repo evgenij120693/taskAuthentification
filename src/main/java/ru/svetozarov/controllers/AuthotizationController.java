@@ -80,7 +80,7 @@ public class AuthotizationController {
         session.setMaxInactiveInterval(30 * 60);
         logger.trace("Authorization successfull");
     }
-
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logoutGet(HttpServletRequest req){
         HttpSession session = req.getSession(false);
         if (session != null) {

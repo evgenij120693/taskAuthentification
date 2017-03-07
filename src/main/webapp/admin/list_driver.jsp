@@ -30,7 +30,6 @@
         <table class="table table-hover">
             <tr>
                 <th>Логин</th>
-                <th>Пароль</th>
                 <th>Имя</th>
                 <th>Фамилия</th>
                 <th>Телефон</th>
@@ -41,7 +40,6 @@
             <c:forEach items="${list}" var="driver">
                 <tr>
                     <td><c:out value="${driver.getLogin()}"></c:out></td>
-                    <td><c:out value="${driver.getPassword()}"></c:out></td>
                     <td><c:out value="${driver.getFirstName()}"></c:out></td>
                     <td><c:out value="${driver.getLastName()}"></c:out></td>
                     <td><c:out value="${driver.getPhoneNumber()}"></c:out></td>

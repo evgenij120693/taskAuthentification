@@ -32,7 +32,7 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/taxi/admin/edit_account">Профиля</a></li>
+                <li><a href="/taxi/admin/edit_account">Профиль</a></li>
                 <li><a href="/taxi/admin/list_client">Список клиентов</a></li>
                 <li><a href="/taxi/admin/list_driver">Список водителей</a></li>
                 <li><a href="/taxi/admin/list_auto">Список автомобилей</a></li>

@@ -25,7 +25,6 @@
         <table class="table table-hover">
             <tr>
                 <th>Логин</th>
-                <th>Пароль</th>
                 <th>Имя</th>
                 <th>Пол</th>
                 <th>Телефон</th>
@@ -34,7 +33,6 @@
             <c:forEach items="${list}" var="client">
                 <tr>
                     <td><c:out value="${client.getLogin()}"></c:out></td>
-                    <td><c:out value="${client.getPassword()}"></c:out></td>
                     <td><c:out value="${client.getName()}"></c:out></td>
                     <td>
                         <c:if test="${client.getSex() eq 'm'}">мужской</c:if>

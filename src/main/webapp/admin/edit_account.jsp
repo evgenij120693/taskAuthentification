@@ -26,7 +26,7 @@
                 <tr>
                     <td>Пароль</td>
                     <td><input type="text" class="form-control" name="password" required
-                               value="<%=admin.getPassword()%>"></td>
+                               value="<%=admin.getPassword()%>"</td>
                 </tr>
                 <tr>
                     <td>Имя</td>

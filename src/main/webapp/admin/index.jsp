@@ -25,12 +25,9 @@
 
             <tr>
                 <td>Логин</td>
-                <td><%=admin.getLogin()%>></td>
+                <td><%=admin.getLogin()%></td>
             </tr>
-            <tr>
-                <td>Пароль</td>
-                <td><%=admin.getPassword()%></td>
-            </tr>
+
             <tr>
                 <td>Имя</td>
                 <td><%=admin.getName()%></td>
