@@ -28,11 +28,7 @@
                 <td><%=client.getLogin()%>
                 </td>
             </tr>
-            <tr>
-                <td>Пароль</td>
-                <td><%=client.getPassword()%>
-                </td>
-            </tr>
+
             <tr>
                 <td>ФИО</td>
                 <td><%=client.getName()%>
