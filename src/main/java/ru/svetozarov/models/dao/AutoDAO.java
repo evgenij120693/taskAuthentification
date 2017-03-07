@@ -42,6 +42,7 @@ public class AutoDAO implements IAutoDAO {
                         resultSet.getString("color")
                 );
                 list.add(auto);
+
             }
         } catch (SQLException e) {
             logger.error(e);

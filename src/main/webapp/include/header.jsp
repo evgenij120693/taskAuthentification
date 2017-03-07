@@ -12,7 +12,7 @@
     <link href="${bootstrap_responsive}" rel="stylesheet"/>
     <link href="${app}" rel="stylesheet"/>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="js/bootstrap/bootstrap.min.js"></script>
+    <script src="/taxi/js/bootstrap/bootstrap.js"></script>
 
 </head>
 <body>

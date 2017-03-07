@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.svetozarov.common.exception.ClientDAOException;
-import ru.svetozarov.controllers.LoginServlet;
 import ru.svetozarov.models.pojo.Client;
 import org.apache.log4j.Logger;
 import ru.svetozarov.services.IClientService;
@@ -21,7 +20,7 @@ import java.util.List;
  * Created by Шмыга on 25.02.2017.
  */
 public class ListClientServlet extends HttpServlet{
-    private static Logger logger = Logger.getLogger(LoginServlet.class);
+    private static Logger logger = Logger.getLogger(ListClientServlet.class);
 
     private IClientService IClientService;
     @Autowired
