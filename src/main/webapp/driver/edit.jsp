@@ -28,7 +28,7 @@
                 </tr>
                 <tr>
                     <td>Пароль</td>
-                    <td><input class="form-control" required type="text" name="password" value="<%=driver.getPassword()%>"></td>
+                    <td><input class="form-control" required type="text" name="password" value="/*-1235-**"></td>
                 </tr>
                 <tr>
                     <td>Имя</td>
