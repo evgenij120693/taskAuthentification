@@ -10,6 +10,7 @@
 <% String name = (String) request.getSession(false).getAttribute("name");%>
 <html>
 <head>
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/image/tabicon.png" type="image/png">
     <link href="${pageContext.request.contextPath}/css/bootstrap/bootstrap.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/css/bootstrap/bootstrap-responsive.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/css/app.css" rel="stylesheet">

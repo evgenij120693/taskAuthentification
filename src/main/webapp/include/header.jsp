@@ -4,6 +4,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <head>
+    <link rel="shortcut icon" href="image/tabicon.png" type="image/png">
+
     <spring:url value="/css/bootstrap/bootstrap.css" var="bootstrap"/>
     <spring:url value="/css/bootstrap/bootstrap-responsive.css" var="bootstrap_responsive"/>
     <spring:url value="/css/app.css" var="app"/>

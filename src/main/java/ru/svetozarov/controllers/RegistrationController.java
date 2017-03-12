@@ -79,11 +79,11 @@ public class RegistrationController {
                 } else {
                     logger.trace("Dublicate client");
                     //resp.sendRedirect("/taxi/registration");
-                    modelAndView.addObject("error", "РџСЂРѕРёР·РѕС€Р»Р° РѕС€РёР±РєР° РїРѕРїСЂРѕР±СѓР№С‚Рµ РїРѕР·Р¶Рµ.");
+                    modelAndView.addObject("error", "Не удалось зарегистрироваться. Попробуйте позже.");
                     modelAndView.addObject("/registration");
                 }
             } else {
-                modelAndView.addObject("error", "РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃ С‚Р°РєРёРј Р»РѕРіРёРЅРѕРј СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚.");
+                modelAndView.addObject("error", "Пользователь с таким логином уже существует.");
                 modelAndView.setViewName("/registration");
                 //resp.sendRedirect("/taxi/registration");
             }

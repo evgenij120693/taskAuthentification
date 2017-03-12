@@ -58,7 +58,7 @@ public class AuthotizationController {
                 modelAndView.setViewName("redirect:/" + user.getRole());
             } else {
                 logger.trace("Authorization failed");
-                modelAndView.addObject("error", "РќРµРІРµСЂРЅС‹Р№ Р»РѕРіРёРЅ/РїР°СЂРѕР»СЊ.");
+                modelAndView.addObject("error", "Неверный логин/пароль.");
                 modelAndView.setViewName("/login");
                 //resp.sendRedirect("/taxi/login");
             }
