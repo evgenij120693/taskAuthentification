@@ -41,25 +41,32 @@
                 <td>
                     <c:out value="${order.getPrice()}"></c:out>
                 </td>
-                <td>
-                    <c:out value="${order.getEntityDriver().getFirstName()}"></c:out>
+                <c:if test="${order.getEntytiStatus().getId() eq 5}">
+                    <td class="warning" style="text-align: center;" colspan="5">
+                        Заказ отменен
+                    </td>
+                </c:if>
+                <c:if test="${order.getEntytiStatus().getId() != 5}">
+                    <td>
+                        <c:out value="${order.getEntityDriver().getFirstName()}"></c:out>
 
-                </td>
-                <td>
+                    </td>
+                    <td>
 
-                    <c:out value="${order.getEntityDriver().getEntryAuto().getMarka()}"></c:out>
-                    <c:out value="${order.getEntityDriver().getEntryAuto().getModel()}"></c:out>
-                </td>
-                <td>
+                        <c:out value="${order.getEntityDriver().getEntryAuto().getMarka()}"></c:out>
+                        <c:out value="${order.getEntityDriver().getEntryAuto().getModel()}"></c:out>
+                    </td>
+                    <td>
 
-                    <c:out value="${order.getEntityDriver().getPhoneNumber()}"></c:out>
-                </td>
-                <td>
-                    <c:out value="${order.getDateStart()}"></c:out>
-                </td>
-                <td>
-                    <c:out value="${order.getDateEnd()}"></c:out>
-                </td>
+                        <c:out value="${order.getEntityDriver().getPhoneNumber()}"></c:out>
+                    </td>
+                    <td>
+                        <c:out value="${order.getDateStart()}"></c:out>
+                    </td>
+                    <td>
+                        <c:out value="${order.getDateEnd()}"></c:out>
+                    </td>
+                </c:if>
                 </tr>
             </c:forEach>
 

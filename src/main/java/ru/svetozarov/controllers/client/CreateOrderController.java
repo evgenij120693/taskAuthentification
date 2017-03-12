@@ -87,4 +87,29 @@ public class CreateOrderController {
         }
         return modelAndView;
     }
+
+    @RequestMapping(value = "/client/cancel_order", method = RequestMethod.GET)
+    public ModelAndView closeOrderGet(@RequestParam (name = "id", defaultValue = "0")
+                                                  Integer id){
+        ModelAndView modelAndView = new ModelAndView();
+        if(id != 0) {
+            try {
+                if(iOrderService.cancelOrderOfDriver(id)){
+                    logger.trace("Cancel order succesfull");
+                    modelAndView.setViewName("redirect:/client/taxi");
+                }else{
+                    logger.trace("cancel order failed");
+                    modelAndView.setViewName("redirect:/client/taxi");
+                }
+
+            } catch (OrderDAOException e) {
+                logger.error(e);
+                modelAndView.setViewName("redirect:/error.jsp");
+            }
+        }else{
+            modelAndView.setViewName("redirect:/client/taxi");
+        }
+        return  modelAndView;
+    }
+
 }

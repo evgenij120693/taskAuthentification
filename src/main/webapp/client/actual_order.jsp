@@ -75,6 +75,13 @@
                     </c:choose>
 
                 </td>
+                <td>
+                    <a class="btn btn-danger"
+                       href="/taxi/client/cancel_order?id=<c:out value="${order.getId()}"></c:out>"
+                    >
+                        Отменить завку
+                    </a>
+                </td>
             </tr>
         </table>
     </div>

@@ -28,4 +28,6 @@ public interface IOrderDAO {
     Order getListOrderActualByClient(int id_client) throws OrderDAOException;
 
     boolean updateOrderClient(Order order) throws OrderDAOException;
+
+    boolean cancelOrderClient(int id) throws OrderDAOException ;
 }

@@ -28,4 +28,6 @@ public interface IOrderService {
     Order getOrderActualByClient(int id_client) throws OrderDAOException;
 
     List<Order> getListOrderHistoryByClient(int id_client) throws OrderDAOException;
+
+    boolean cancelOrderOfDriver(int id) throws OrderDAOException;
 }

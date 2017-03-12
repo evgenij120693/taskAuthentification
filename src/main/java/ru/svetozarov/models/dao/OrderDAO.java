@@ -52,9 +52,10 @@ public class OrderDAO implements IOrderDAO {
 
     public  final String SQL_UPDATE_ORDER_OF_DRIVER = "update taxi.order set id_driver=?, start_date=?," +
             " end_date=?, id_status=? where id=? ";
+    public final String SQL_UPDATE_ORDER_OF_CLIENT_CANCEL = "update taxi.order set id_status = 5 where id=?";
 
     public  final String SQL_SELECT_ACTUAL_ORDER_BY_CLIENT_AND_STATUS = "select * from taxi.order where id_client=? " +
-            "and id_status<>4";
+            "and id_status<>4 and id_status<>5";
     public  final String SQL_SELECT_HISTORY_ORDER_BY_CLIENT = "select * from taxi.order where id_client=? " +
             "and id_status<>1";
 
@@ -153,7 +154,7 @@ public class OrderDAO implements IOrderDAO {
                             result.getString(4),
                             result.getString(5),
                             result.getInt(6),
-                            IDriverDAO.getDriverById(result.getInt(7)),
+                            IDriverDAO.getDriverByIdJoinAutoAndStatus(result.getInt(7)),
                             result.getString(8),
                             result.getString(9),
                             IStatusDAO.getStatusOrderById(result.getInt(10))
@@ -242,6 +243,28 @@ public class OrderDAO implements IOrderDAO {
                 return true;
             }else{
                 logger.trace("Update order of driver failed");
+            }
+        } catch (ConnectorException e) {
+            logger.error(e);
+            throw new OrderDAOException();
+        } catch (SQLException e) {
+            logger.error(e);
+            throw new OrderDAOException();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean cancelOrderClient(int id) throws OrderDAOException {
+        try (Connection conn = Connector.getConnection()) {
+            PreparedStatement statement = conn.prepareStatement(SQL_UPDATE_ORDER_OF_CLIENT_CANCEL);
+            statement.setInt(1, id);
+            int count = statement.executeUpdate();
+            if(count > 0){
+                logger.trace("Cancel order of client successful");
+                return true;
+            }else{
+                logger.trace("Cancel order of client failed");
             }
         } catch (ConnectorException e) {
             logger.error(e);
