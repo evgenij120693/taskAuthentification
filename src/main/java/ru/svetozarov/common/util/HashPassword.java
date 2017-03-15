@@ -22,10 +22,10 @@ public class HashPassword implements IHashPassword {
         String sha256hex;
         byte[] hash;
         try {
-            password +=salt;
             digest = MessageDigest.getInstance("SHA-256");
             hash = digest.digest(password.getBytes());
             password = new String(Hex.encode(hash));
+            password +=salt;
             hash = digest.digest(password.getBytes());
             password = new String(Hex.encode(hash));
         } catch (NoSuchAlgorithmException e) {

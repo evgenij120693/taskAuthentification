@@ -12,4 +12,6 @@ public interface IUserDAO {
     boolean checkUserByLogin(String login, int id) throws UserDAOException;
 
     User getUserByLoginAndPassword(String login, String password) throws UserDAOException;
+
+    User getUserByLogin(String login) throws UserDAOException;
 }

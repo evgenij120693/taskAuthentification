@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   Date: 26.02.2017
@@ -32,7 +33,7 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/taxi/driver">Профиль</a></li>
+                <li><a href="/taxi/client">Профиль</a></li>
                 <li><a href="/taxi/client/history_order">История заказов</a></li>
                 <li><a href="/taxi/client/taxi">Заказ такси</a></li>
 
@@ -41,7 +42,8 @@
                 <li><a>
                     <%--<img src="http://iconizer.net/files/Human_o2/orig/emblem-people.png" width="25px;">--%>
                     <%=name%></a></li>
-                <li> <a href="/taxi/logout" class="">Выйти</a></li>
+                <c:url var="logoutUrl" value="/j_spring_security_logout"/>
+                <li> <a href="${logoutUrl}">Выйти</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

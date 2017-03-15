@@ -1,5 +1,7 @@
 package ru.svetozarov.models.pojo;
 
+import java.util.Map;
+
 /**
  * Created by Шмыга on 26.02.2017.
  */
@@ -10,7 +12,7 @@ public class Auto {
     private String regNumber;
 
     private String color;
-
+ 
     public Auto(int id, String marka, String model, String regNumber, String color) {
         this.id = id;
         this.marka = marka;

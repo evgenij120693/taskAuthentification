@@ -19,6 +19,7 @@ import java.sql.SQLException;
 @Repository(value = "userDAO")
 public class UserDAO implements IUserDAO {
 
+
     private static Logger logger = Logger.getLogger(UserDAO.class);
     private  final String QUERY_SELECT_ALL_BY_LOGIN = "select login, password from taxi.admin" +
             " where login=? " +
@@ -35,6 +36,12 @@ public class UserDAO implements IUserDAO {
             " union select id, login, password, name, 'client' as role  from  taxi.client where login=? and password=? " +
             "  union select id, login, password, first_name as 'name', 'driver' as role " +
             "from  taxi.driver where login=? and password=? ";
+
+    private  final String QUERY_SELECT_BY_LOGIN = "select id, login, password, name," +
+            " 'ROLE_ADMIN' as role from taxi.admin  where login=? " +
+            " union select id, login, password, name, 'ROLE_USER' as role  from  taxi.client where login=?  " +
+            "  union select id, login, password, first_name as 'name', 'ROLE_DRIVER' as role " +
+            "from  taxi.driver where login=? ";
 
     @Override
     public  boolean checkUserByLogin(String login) throws UserDAOException {
@@ -116,6 +123,39 @@ public class UserDAO implements IUserDAO {
 
             } else {
                 logger.debug(login + " and " + login + " not found");
+            }
+        } catch (SQLException e) {
+            logger.error(e);
+            throw new UserDAOException();
+        } catch (ConnectorException e) {
+            logger.error(e);
+            throw new UserDAOException();
+        }
+        return user;
+    }
+
+    @Override
+    public User getUserByLogin(String login) throws UserDAOException {
+        User user = null;
+        try (Connection conn = Connector.getConnection()) {
+            PreparedStatement prepS = conn.prepareStatement(QUERY_SELECT_BY_LOGIN);
+            prepS.setString(1, login);
+            prepS.setString(2, login);
+            prepS.setString(3, login);
+
+            ResultSet resultSet = prepS.executeQuery();
+            if (resultSet.next()) {
+                logger.debug(login + "   found");
+                user = new User(
+                        resultSet.getInt(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5)
+                );
+
+            } else {
+                logger.debug(login + "  not found");
             }
         } catch (SQLException e) {
             logger.error(e);

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-4.2.xsd
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+    <http auto-config="true" >
+
+        <form-login login-page="/login"
+                    login-processing-url="/j_spring_security_check"
+                    username-parameter="j_username"
+                    password-parameter="j_password"
+                    default-target-url="/login"
+                    authentication-failure-url="/login?error=true"/>
+        <!--<http-basic />-->
+        <logout logout-url="/j_spring_security_logout"  logout-success-url="/" invalidate-session="true"/>
+        <anonymous username="guest" granted-authority="ROLE_ANONYMOUS"/>
+        <intercept-url pattern="/index*" access="hasRole('ROLE_ANONYMOUS')
+OR hasRole('ROLE_ADMIN') OR hasRole('ROLE_USER') OR hasRole('ROLE_DRIVER')"/>
+        <intercept-url pattern="/admin*" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/admin/*" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/client*" access="hasRole('ROLE_USER') "/>
+        <intercept-url pattern="/client/*" access="hasRole('ROLE_USER') "/>
+        <intercept-url pattern="/driver*" access="hasRole('ROLE_DRIVER') "/>
+        <intercept-url pattern="/driver/*" access="hasRole('ROLE_DRIVER') "/>
+        <remember-me
+                key="spitterKey"
+                token-validity-seconds="2419200" />
+        <csrf disabled="true"/>
+    </http>
+
+
+    <authentication-manager>
+
+        <authentication-provider user-service-ref="myUserDetail">
+
+            <password-encoder ref="bcryptBean"/>
+        </authentication-provider>
+    </authentication-manager>
+
+
+    <!--<beans:bean id="dataSource"-->
+                <!--class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
+
+        <!--<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />-->
+        <!--<beans:property name="url"-->
+                        <!--value="jdbc:mysql://localhost:3306/example?useSSL=false" />-->
+        <!--<beans:property name="username" value="root" />-->
+        <!--<beans:property name="password" value="1234" />-->
+    <!--</beans:bean>-->
+    <beans:bean id="myUserDetail" class="ru.svetozarov.controllers.CustomUserService">
+
+    </beans:bean>
+
+    <beans:bean id="bcryptBean"  class="ru.svetozarov.common.util.DatabaseAuthenticationProvider">
+
+</beans:bean>
+
+    <!-- If DataSource is configured in Tomcat Servlet Container -->
+    <!--<beans:bean id="dbDataSource"-->
+    <!--class="org.springframework.jndi.JndiObjectFactoryBean">-->
+    <!--<beans:property name="jndiName" value="java:comp/env/jdbc/MyLocalDB" />-->
+    <!--</beans:bean>-->
+
+</beans:beans>
+

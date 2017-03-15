@@ -33,14 +33,15 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/taxi/admin/edit_account">Профиль</a></li>
+                <li><a href="/taxi/admin">Профиль</a></li>
                 <li><a href="/taxi/admin/list_client">Список клиентов</a></li>
                 <li><a href="/taxi/admin/list_driver">Список водителей</a></li>
                 <li><a href="/taxi/admin/list_auto">Список автомобилей</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#" class="">Привет, <%=name%></a></li>
-                <li> <a href="/taxi/logout">Выйти</a></li>
+                <c:url var="logoutUrl" value="/j_spring_security_logout"/>
+                <li> <a href="${logoutUrl}">Выйти</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

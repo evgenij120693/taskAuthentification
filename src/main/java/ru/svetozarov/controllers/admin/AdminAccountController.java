@@ -29,9 +29,8 @@ public class AdminAccountController {
     }
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
-    public ModelAndView admminAccountGet(HttpServletRequest req ){
+    public ModelAndView admminAccountGet(HttpSession session ){
         ModelAndView modelAndView = new ModelAndView();
-        HttpSession session = req.getSession(false);
         int id = (int) session.getAttribute("id");
         try {
             Admin admin = IAdminService.getAdminById(id);

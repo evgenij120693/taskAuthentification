@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Шмыга
@@ -42,7 +43,8 @@
                 <li><a>
                     <%--<img src="http://iconizer.net/files/Human_o2/orig/emblem-people.png" width="25px;">--%>
                     <%=name%></a></li>
-                <li> <a href="/taxi/logout" class="">Выйти</a></li>
+                <c:url var="logoutUrl" value="/j_spring_security_logout"/>
+                <li> <a href="${logoutUrl}">Выйти</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

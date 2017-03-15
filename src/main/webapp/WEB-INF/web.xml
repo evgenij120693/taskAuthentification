@@ -7,8 +7,13 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/dispatcher-servlet.xml</param-value>
+        <param-value>
+            /WEB-INF/dispatcher-servlet.xml
+            /WEB-INF/security-context.xml
+        </param-value>
     </context-param>
+
+
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
@@ -45,73 +50,6 @@
     </resource-ref>
 
 
-
-
-
-    <filter>
-        <filter-name>AuthenticationFilter</filter-name>
-        <filter-class>ru.svetozarov.controllers.filters.AuthentificationFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>AuthenticationFilter</filter-name>
-        <url-pattern>/admin/*</url-pattern>
-        <url-pattern>/admin</url-pattern>
-        <url-pattern>/driver/*</url-pattern>
-        <url-pattern>/driver</url-pattern>
-        <url-pattern>/client/*</url-pattern>
-        <url-pattern>/client</url-pattern>
-    </filter-mapping>
-
-
-
-    <filter>
-        <filter-name>CheckRoleAdminFilter</filter-name>
-        <filter-class>ru.svetozarov.controllers.filters.CheckRoleAdminFilter</filter-class>
-
-    </filter>
-    <filter-mapping>
-        <filter-name>CheckRoleAdminFilter</filter-name>
-        <url-pattern>/admin/*</url-pattern>
-        <url-pattern>/admin</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-    </filter-mapping>
-
-    <filter>
-        <filter-name>CheckRoleDriverFilter</filter-name>
-        <filter-class>ru.svetozarov.controllers.filters.CheckRoleDriverFilter</filter-class>
-
-    </filter>
-    <filter-mapping>
-        <filter-name>CheckRoleDriverFilter</filter-name>
-        <url-pattern>/driver/*</url-pattern>
-        <url-pattern>/driver</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-    </filter-mapping>
-
-    <filter>
-        <filter-name>CheckRoleClientFilter</filter-name>
-        <filter-class>ru.svetozarov.controllers.filters.CheckRoleClientFilter</filter-class>
-
-    </filter>
-    <filter-mapping>
-        <filter-name>CheckRoleClientFilter</filter-name>
-        <url-pattern>/client/*</url-pattern>
-        <url-pattern>/client</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-    </filter-mapping>
-
-
-    <filter>
-        <filter-name>CheckLoginFilter</filter-name>
-        <filter-class>ru.svetozarov.controllers.filters.CheckLoginFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>CheckLoginFilter</filter-name>
-        <url-pattern>/index.jsp</url-pattern>
-        <url-pattern>/login</url-pattern>
-        <url-pattern>/registration</url-pattern>
-    </filter-mapping>
-
     <listener>
         <listener-class>ru.svetozarov.controllers.listener.SessionListeners</listener-class>
     </listener>
@@ -120,6 +58,18 @@
         <param-name>PARAMETER_ENCODING</param-name>
         <param-value>UTF-8</param-value>
     </context-param>
+
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>
+            org.springframework.web.filter.DelegatingFilterProxy
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
 
     <filter>
         <filter-name>encodingFilter</filter-name>
@@ -138,22 +88,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <!--<error-page>-->
-        <!--<error-code>404</error-code>-->
-        <!--<location>/error.jsp</location>-->
-    <!--</error-page>-->
-    
-    <!--<welcome-file-list>-->
-        <!--<welcome-file>index.jsp</welcome-file>-->
-    <!--</welcome-file-list>-->
-
-    <!--<listener>-->
-        <!--<listener-class>ru.svetozarov.controllers.listeners.ApplicationLoadListener</listener-class>-->
-    <!--</listener>-->
-
-    <!--<listener>-->
-        <!--<listener-class>ru.svetozarov.controllers.listeners.SessionListener</listener-class>-->
-    <!--</listener>-->
 
 
 

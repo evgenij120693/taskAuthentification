@@ -35,6 +35,11 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public User getUserByLogin(String login) throws UserDAOException {
+        return IUserDAO.getUserByLogin(login);
+    }
+
+    @Override
     public  User getUserByLoginAndPassword(String login, String password) throws UserDAOException {
         return IUserDAO.getUserByLoginAndPassword(login, password);
     }
