@@ -4,12 +4,22 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.svetozarov.common.exception.ConnectorException;
 import ru.svetozarov.common.exception.DriverDAOException;
+import ru.svetozarov.common.util.Factory;
 import ru.svetozarov.models.connector.Connector;
+import ru.svetozarov.models.entity.DriverEntity;
+import ru.svetozarov.models.mapper_entity.DriverMapper;
 import ru.svetozarov.models.pojo.Auto;
 import ru.svetozarov.models.pojo.Driver;
 import ru.svetozarov.models.pojo.Status;
 import org.apache.log4j.Logger;
+import ru.svetozarov.models.pojo.User;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +31,10 @@ import java.util.List;
 public class DriverDAO implements IDriverDAO {
 
     private static Logger logger = Logger.getLogger(DriverDAO.class);
+
+    private static final EntityManagerFactory FACTORY =
+            Persistence.createEntityManagerFactory("DRIVER");
+
 
     private  final String QUERY_SELECT_DRIVER_BY_LOGIN_AND_PASSWORD = "select * from taxi.driver as dr " +
             "JOIN taxi.auto as au ON dr.id_auto = au.id JOIN taxi.status_driver as st ON dr.id_status = st.id" +
@@ -78,7 +92,23 @@ public class DriverDAO implements IDriverDAO {
     @Override
     public  List<Driver> getListDriver() throws DriverDAOException {
         List<Driver> list = new ArrayList<>();
-        try (Connection conn = Connector.getConnection()) {
+        EntityManager em = FACTORY.createEntityManager();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<DriverEntity> criteriaQuery = criteriaBuilder.createQuery(DriverEntity.class);
+        Root<DriverEntity> root = criteriaQuery.from(DriverEntity.class);
+        criteriaQuery.select(root);
+        criteriaQuery.where(
+                criteriaBuilder.and(
+                )
+        );
+        List<DriverEntity> listDriverEntity = em.createQuery(criteriaQuery).getResultList();
+        for (DriverEntity driver :
+                listDriverEntity) {
+            list.add(DriverMapper.converterToDriver(driver));
+        }
+       // System.out.println();
+        return list;
+       /* try (Connection conn = Connector.getConnection()) {
             Statement statement = conn.createStatement();
             ResultSet result = statement.executeQuery(QUERY_SELECT_ALL_DRIVER);
             while (result.next()) {
@@ -112,8 +142,8 @@ public class DriverDAO implements IDriverDAO {
         } catch (ConnectorException e) {
             logger.error(e);
             throw new DriverDAOException();
-        }
-        return list;
+        }*/
+       // return list;
     }
 
     @Override
