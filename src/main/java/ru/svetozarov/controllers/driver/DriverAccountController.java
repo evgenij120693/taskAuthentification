@@ -33,7 +33,7 @@ public class DriverAccountController {
         int id = (int) session.getAttribute("id");
         if (id != 0) {
             try {
-                Driver driver = IDriverService.getDriverByIdJoinAutoAndStatus(id);
+                Driver driver = IDriverService.getDriverById(id);
                 if (driver != null) {
                     modelAndView.addObject("driver", driver);
                     modelAndView.setViewName("/driver/index");

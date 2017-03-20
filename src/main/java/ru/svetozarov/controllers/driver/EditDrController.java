@@ -12,6 +12,7 @@ import ru.svetozarov.common.exception.DriverDAOException;
 import ru.svetozarov.common.exception.HashPasswordException;
 import ru.svetozarov.common.exception.StatusDAOException;
 import ru.svetozarov.common.util.IHashPassword;
+import ru.svetozarov.models.pojo.Auto;
 import ru.svetozarov.models.pojo.Driver;
 import ru.svetozarov.models.pojo.Status;
 import ru.svetozarov.services.IDriverService;
@@ -56,7 +57,7 @@ public class EditDrController {
         int id = (int) session.getAttribute("id");
         if (id != 0) {
             try {
-                Driver driver = IDriverService.getDriverByIdJoinAutoAndStatus(id);
+                Driver driver = IDriverService.getDriverById(id);
                 List<Status> statusList = IStatusService.getAllStatusDriver();
                 if (driver != null) {
                     modelAndView.addObject("driver", driver);
@@ -88,6 +89,9 @@ public class EditDrController {
         int id = (int) session.getAttribute("id");
         try {
             Driver temp = IDriverService.getDriverById(id);
+            Auto tempAuto = new Auto();
+            //tempAuto.setId(temp.getEntryAuto().getId());
+
             String hashPassword;
             if(password.equals("/*-1235-**")){
                 hashPassword = temp.getPassword();
@@ -100,8 +104,8 @@ public class EditDrController {
                     temp.getLogin(),
                     hashPassword,
                     temp.getRating(),
-                    temp.getAuto(),
-                    temp.getStatus()
+                    temp.getEntryAuto(),
+                    temp.getEntryStatus()
             );
             if(IDriverService.updateDriver(driver)){
                 logger.trace("Update driver successful");

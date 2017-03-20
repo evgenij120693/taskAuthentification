@@ -14,6 +14,7 @@ import ru.svetozarov.common.exception.HashPasswordException;
 import ru.svetozarov.common.exception.UserDAOException;
 import ru.svetozarov.models.pojo.Auto;
 import ru.svetozarov.models.pojo.Driver;
+import ru.svetozarov.models.pojo.Status;
 import ru.svetozarov.services.IAutoService;
 import ru.svetozarov.services.IDriverService;
 import ru.svetozarov.services.IUserService;
@@ -99,6 +100,10 @@ public class EditDriverController {
             if(password.equals("1*+234")){
                 hashPassword = tempDriver.getPassword();
             }else hashPassword = IHashPassword.hashingPassword(password);
+            Auto auto1 = new Auto();
+            auto1.setId(auto);
+            Status status = new Status();
+            status.setId(1);
             Driver driver = new Driver(
                     id,
                     lastName,
@@ -107,8 +112,8 @@ public class EditDriverController {
                     login,
                     hashPassword,
                     rating,
-                    auto,
-                    1
+                    auto1,
+                    status
             );
             if(IUserService.checkUserByLoginAndId(login, id)) {
                 if(IDriverService.updateDriver(driver)) {

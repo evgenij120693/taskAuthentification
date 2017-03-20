@@ -12,7 +12,7 @@ import ru.svetozarov.models.pojo.Driver;
  * Created by Evgenij on 20.03.2017.
  */
 public class AutoMapper {
-    public static Auto converterToDriver(AutoEntity autoEntity){
+    public static Auto converterToAuto(AutoEntity autoEntity){
         MapperFactory factory = new DefaultMapperFactory.Builder().build();
         factory.classMap(AutoEntity.class, Auto.class).
                 field("id", "id").
@@ -23,5 +23,17 @@ public class AutoMapper {
         MapperFacade mapperFacade = factory.getMapperFacade();
         Auto auto = mapperFacade.map(autoEntity, Auto.class);
         return auto;
+    }
+    public static AutoEntity converterToAutoEntity(Auto auto){
+        MapperFactory factory = new DefaultMapperFactory.Builder().build();
+        factory.classMap(Auto.class, AutoEntity.class).
+                field("id", "id").
+                field("marka", "marka").
+                field("regNumber", "regNumber").
+                field("color", "color").
+                toClassMap();
+        MapperFacade mapperFacade = factory.getMapperFacade();
+        AutoEntity autoEntity = mapperFacade.map(auto, AutoEntity.class);
+        return autoEntity;
     }
 }

@@ -15,6 +15,7 @@ import ru.svetozarov.common.exception.UserDAOException;
 import ru.svetozarov.common.util.IHashPassword;
 import ru.svetozarov.models.pojo.Auto;
 import ru.svetozarov.models.pojo.Driver;
+import ru.svetozarov.models.pojo.Status;
 import ru.svetozarov.services.IAutoService;
 import ru.svetozarov.services.IDriverService;
 import ru.svetozarov.services.IUserService;
@@ -84,6 +85,10 @@ public class AddDriverController {
         ModelAndView modelAndView = new ModelAndView();
         try {
             String hashPassword = IHashPassword.hashingPassword(password);
+            Auto autoTemp = new Auto();
+            autoTemp.setId(auto);
+            Status statusTemp = new Status();
+            statusTemp.setId(1);
             Driver driver = new Driver(
                     0,
                     lastName,
@@ -92,8 +97,8 @@ public class AddDriverController {
                     login,
                     hashPassword,
                     rating,
-                    auto,
-                    1
+                    autoTemp,
+                    statusTemp
             );
 
             if (IUserService.checkUserByLogin(login)) {

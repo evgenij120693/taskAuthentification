@@ -33,28 +33,28 @@ public class DriverDAO implements IDriverDAO {
     private static Logger logger = Logger.getLogger(DriverDAO.class);
 
     private static final EntityManagerFactory FACTORY =
-            Persistence.createEntityManagerFactory("DRIVER");
+            Persistence.createEntityManagerFactory("ENTITY");;
 
 
-    private  final String QUERY_SELECT_DRIVER_BY_LOGIN_AND_PASSWORD = "select * from taxi.driver as dr " +
+    private final String QUERY_SELECT_DRIVER_BY_LOGIN_AND_PASSWORD = "select * from taxi.driver as dr " +
             "JOIN taxi.auto as au ON dr.id_auto = au.id JOIN taxi.status_driver as st ON dr.id_status = st.id" +
             " where dr.login=? and  dr.password=?";
     // private  final String QUERY_SELECT_ALL_DRIVER = "select * from taxi.driver";
-    private  final String QUERY_SELECT_ALL_DRIVER = "select * from taxi.driver as dr " +
+    private final String QUERY_SELECT_ALL_DRIVER = "select * from taxi.driver as dr " +
             "JOIN taxi.auto as au ON dr.id_auto = au.id JOIN taxi.status_driver as st ON dr.id_status = st.id";
-    private  final String QUERY_ADD_DRIVER = "insert into taxi.driver (first_name, last_name, " +
+    private final String QUERY_ADD_DRIVER = "insert into taxi.driver (first_name, last_name, " +
             "phone_number, login, password, rating, id_auto, id_status) values (?,?,?,?,?,?,?,?)";
-    private  final String QUERY_UPDATE_DRIVER = "update taxi.driver set first_name=?," +
+    private final String QUERY_UPDATE_DRIVER = "update taxi.driver set first_name=?," +
             " last_name=?, phone_number=?, login=?, password=?, rating=?, id_auto=?, id_status=?" +
             " where id=?";
-    private  final String QUERY_SELECT_DRIVER_BY_ID = "select *from taxi.driver where id=?";
-    private  final String QUERY_SELECT_DRIVER_BY_ID_JOIN_AUTO_AND_STATUS = "select * from taxi.driver as dr " +
+    private final String QUERY_SELECT_DRIVER_BY_ID = "select *from taxi.driver where id=?";
+    private final String QUERY_SELECT_DRIVER_BY_ID_JOIN_AUTO_AND_STATUS = "select * from taxi.driver as dr " +
             "JOIN taxi.auto as au ON dr.id_auto = au.id JOIN taxi.status_driver as st ON dr.id_status = st.id" +
             " where dr.id=?";
-    private  final String QUERY_DELETE_DRIVER_BY_ID = "delete from taxi.driver where id=?";
+    private final String QUERY_DELETE_DRIVER_BY_ID = "delete from taxi.driver where id=?";
 
     @Override
-    public  Driver getDriverByLoginAndPassword(String login, String password) throws DriverDAOException {
+    public Driver getDriverByLoginAndPassword(String login, String password) throws DriverDAOException {
         Driver driver = null;
 
         try (Connection conn = Connector.getConnection();
@@ -90,65 +90,41 @@ public class DriverDAO implements IDriverDAO {
     }
 
     @Override
-    public  List<Driver> getListDriver() throws DriverDAOException {
+    public List<Driver> getListDriver() throws DriverDAOException {
         List<Driver> list = new ArrayList<>();
         EntityManager em = FACTORY.createEntityManager();
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<DriverEntity> criteriaQuery = criteriaBuilder.createQuery(DriverEntity.class);
         Root<DriverEntity> root = criteriaQuery.from(DriverEntity.class);
         criteriaQuery.select(root);
-        criteriaQuery.where(
+        /*criteriaQuery.where(
                 criteriaBuilder.and(
                 )
-        );
+        );*/
         List<DriverEntity> listDriverEntity = em.createQuery(criteriaQuery).getResultList();
+        System.out.println(listDriverEntity +"size="+listDriverEntity.size());
+        System.out.println(listDriverEntity.get(0).getFirstName());
         for (DriverEntity driver :
                 listDriverEntity) {
+
             list.add(DriverMapper.converterToDriver(driver));
         }
-       // System.out.println();
+         System.out.println();
         return list;
-       /* try (Connection conn = Connector.getConnection()) {
-            Statement statement = conn.createStatement();
-            ResultSet result = statement.executeQuery(QUERY_SELECT_ALL_DRIVER);
-            while (result.next()) {
-                logger.trace("result select driver " + result.getString("last_name"));
-                Driver driver = new Driver(
-                        result.getInt(1),
-                        result.getString(3),
-                        result.getString(2),
-                        result.getString(4),
-                        result.getString(5),
-                        result.getString(6),
-                        result.getInt(7),
-                        new Auto(
-                                result.getInt(10),
-                                result.getString(11),
-                                result.getString(12),
-                                result.getString(13),
-                                result.getString(14)
-                        ),
-                new Status(
-                        result.getInt(15),
-                        result.getString(16),
-                        result.getString(17)
-                )
-                );
-                list.add(driver);
-            }
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new DriverDAOException();
-        } catch (ConnectorException e) {
-            logger.error(e);
-            throw new DriverDAOException();
-        }*/
-       // return list;
+
     }
 
     @Override
-    public  boolean addDriver(Driver driver) throws DriverDAOException {
-        try (Connection conn = Connector.getConnection()) {
+    public boolean addDriver(Driver driver) throws DriverDAOException {
+        DriverEntity driverEntity = DriverMapper.converterToDriverEntity(driver);
+        EntityManager em = FACTORY.createEntityManager();
+        em.getTransaction().begin();
+        em.merge(DriverMapper.converterToDriverEntity(driver));
+        em.getTransaction().commit();
+        System.out.println("Result insert "+em.contains(driverEntity));
+        em.close();
+        return true;
+       /*try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = null;
             statement = conn.prepareStatement(QUERY_ADD_DRIVER);
             statement.setString(1, driver.getFirstName());
@@ -173,46 +149,29 @@ public class DriverDAO implements IDriverDAO {
             logger.error(e);
             throw new DriverDAOException();
         }
-        return false;
+        return false;*/
     }
 
     @Override
-    public  Driver getDriverById(int id) throws DriverDAOException {
+    public Driver getDriverById(int id) throws DriverDAOException {
         Driver driver = null;
-        byte tr[]= new byte[200];
-
-        try (Connection conn = Connector.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(QUERY_SELECT_DRIVER_BY_ID);
-            statement.setInt(1, id);
-            ResultSet result = statement.executeQuery();
-            if (result.next()) {
-                logger.trace("result select driver by id  " + result.getString("last_name"));
-                driver = new Driver(
-                        result.getInt("id"),
-                        result.getString("last_name"),
-                        result.getString("first_name"),
-                        result.getString("phone_number"),
-                        result.getString("login"),
-                        result.getString("password"),
-                        result.getInt("rating"),
-                        result.getInt("id_auto"),
-                        result.getInt("id_status")
-                );
-            } else {
-                logger.trace("select driver bi id=" + id + " failed");
-            }
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new DriverDAOException();
-        } catch (ConnectorException e) {
-            logger.error(e);
-            throw new DriverDAOException();
-        }
+        EntityManager em = FACTORY.createEntityManager();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<DriverEntity> criteriaQuery = criteriaBuilder.createQuery(DriverEntity.class);
+        Root<DriverEntity> root = criteriaQuery.from(DriverEntity.class);
+        criteriaQuery.select(root);
+        criteriaQuery.where(
+                criteriaBuilder.and(
+                        criteriaBuilder.equal(root.get("id"), id)
+                )
+        );
+        List<DriverEntity> listDriverEntity = em.createQuery(criteriaQuery).getResultList();
+        driver = DriverMapper.converterToDriver(listDriverEntity.get(0));
         return driver;
     }
 
     @Override
-    public  Driver getDriverByIdJoinAutoAndStatus(int id) throws DriverDAOException {
+    public Driver getDriverByIdJoinAutoAndStatus(int id) throws DriverDAOException {
         Driver driver = null;
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(QUERY_SELECT_DRIVER_BY_ID_JOIN_AUTO_AND_STATUS);
@@ -255,8 +214,16 @@ public class DriverDAO implements IDriverDAO {
     }
 
     @Override
-    public  boolean updateDriver(Driver driver) throws DriverDAOException {
-        try (Connection conn = Connector.getConnection()) {
+    public boolean updateDriver(Driver driver) throws DriverDAOException {
+        DriverEntity driverEntity = DriverMapper.converterToDriverEntity(driver);
+        EntityManager em = FACTORY.createEntityManager();
+        em.getTransaction().begin();
+        em.merge(DriverMapper.converterToDriverEntity(driver));
+        em.getTransaction().commit();
+        System.out.println("Result update "+em.contains(driverEntity));
+        em.close();
+        return true;
+       /* try (Connection conn = Connector.getConnection()) {
             PreparedStatement statement = null;
             statement = conn.prepareStatement(QUERY_UPDATE_DRIVER);
             statement.setString(1, driver.getFirstName());
@@ -283,11 +250,11 @@ public class DriverDAO implements IDriverDAO {
             logger.error(e);
             throw new DriverDAOException();
         }
-        return false;
+        return false;*/
     }
 
     @Override
-    public  boolean deleteDriverById(int id) throws DriverDAOException {
+    public boolean deleteDriverById(int id) throws DriverDAOException {
         try (Connection conn = Connector.getConnection()) {
             PreparedStatement prepS = conn.prepareStatement(QUERY_DELETE_DRIVER_BY_ID);
             prepS.setInt(1, id);

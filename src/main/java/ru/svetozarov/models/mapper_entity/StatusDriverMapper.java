@@ -21,4 +21,15 @@ public class StatusDriverMapper {
         Status status = mapperFacade.map(statusDriverEntity, Status.class);
         return status;
     }
+    public static StatusDriverEntity converterToStatusDriverEntity(Status status){
+        MapperFactory factory = new DefaultMapperFactory.Builder().build();
+        factory.classMap(Status.class, StatusDriverEntity.class).
+                field("id", "id").
+                field("name", "name").
+                field("description", "description").
+                toClassMap();
+        MapperFacade mapperFacade = factory.getMapperFacade();
+        StatusDriverEntity statusDriverEntity = mapperFacade.map(status, StatusDriverEntity.class);
+        return statusDriverEntity;
+    }
 }
