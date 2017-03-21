@@ -22,6 +22,7 @@ public class DriverMapper {
                 field("rating", "rating").
                 toClassMap();
         MapperFacade mapperFacade = factory.getMapperFacade();
+        System.out.println(driverEntity.getFirstName() + " driver name");
         Driver driver = mapperFacade.map(driverEntity, Driver.class);
         driver.setEntryAuto(AutoMapper.converterToAuto(driverEntity.getEntryAuto()));
         driver.setEntryStatus(StatusDriverMapper.converterToStatusDriver(driverEntity.getEntryStatus()));

@@ -1,7 +1,9 @@
 package ru.svetozarov.models.dao;
 
-import org.springframework.stereotype.Component;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import ru.svetozarov.common.exception.ConnectorException;
 import ru.svetozarov.common.exception.DriverDAOException;
 import ru.svetozarov.common.util.Factory;
@@ -13,6 +15,7 @@ import ru.svetozarov.models.pojo.Driver;
 import ru.svetozarov.models.pojo.Status;
 import org.apache.log4j.Logger;
 import ru.svetozarov.models.pojo.User;
+import ru.svetozarov.models.repository.DriverRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -20,6 +23,7 @@ import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,14 +31,22 @@ import java.util.List;
 /**
  * Created by Шмыга on 25.02.2017.
  */
+@Transactional
 @Repository(value = "driverDAO")
+
 public class DriverDAO implements IDriverDAO {
 
     private static Logger logger = Logger.getLogger(DriverDAO.class);
 
     private static final EntityManagerFactory FACTORY =
-            Persistence.createEntityManagerFactory("ENTITY");;
+            Persistence.createEntityManagerFactory("ENTITY");
 
+
+    DriverRepository driverRepository;
+    @Autowired
+    public void setDriverRepository(DriverRepository driverRepository) {
+        this.driverRepository = driverRepository;
+    }
 
     private final String QUERY_SELECT_DRIVER_BY_LOGIN_AND_PASSWORD = "select * from taxi.driver as dr " +
             "JOIN taxi.auto as au ON dr.id_auto = au.id JOIN taxi.status_driver as st ON dr.id_status = st.id" +
@@ -121,7 +133,7 @@ public class DriverDAO implements IDriverDAO {
         em.getTransaction().begin();
         em.merge(DriverMapper.converterToDriverEntity(driver));
         em.getTransaction().commit();
-        System.out.println("Result insert "+em.contains(driverEntity));
+        logger.trace("Result insert "+em.contains(driverEntity));
         em.close();
         return true;
        /*try (Connection conn = Connector.getConnection()) {
@@ -155,7 +167,9 @@ public class DriverDAO implements IDriverDAO {
     @Override
     public Driver getDriverById(int id) throws DriverDAOException {
         Driver driver = null;
-        EntityManager em = FACTORY.createEntityManager();
+        DriverEntity driverEntities = driverRepository.findOne(id);
+
+        /*EntityManager em = FACTORY.createEntityManager();
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<DriverEntity> criteriaQuery = criteriaBuilder.createQuery(DriverEntity.class);
         Root<DriverEntity> root = criteriaQuery.from(DriverEntity.class);
@@ -166,7 +180,8 @@ public class DriverDAO implements IDriverDAO {
                 )
         );
         List<DriverEntity> listDriverEntity = em.createQuery(criteriaQuery).getResultList();
-        driver = DriverMapper.converterToDriver(listDriverEntity.get(0));
+        driver = DriverMapper.converterToDriver(listDriverEntity.get(0));*/
+        driver = DriverMapper.converterToDriver(driverEntities);
         return driver;
     }
 

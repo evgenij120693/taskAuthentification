@@ -25,16 +25,16 @@ public class DriverEntity {
     @Column(name = "rating")
     private int rating;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_auto")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_auto", referencedColumnName = "id")
     private AutoEntity entryAuto;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_status")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_status", referencedColumnName = "id")
     private StatusDriverEntity entryStatus;
-
-    @OneToMany( mappedBy = "entityDriver")
-    private Set<OrderEntity> orderEntities;
+        private char a='\u0001';
+    /*@OneToMany( mappedBy = "entityDriver")
+    private Set<OrderEntity> orderEntities;*/
 
 
     public AutoEntity getEntryAuto() {
@@ -48,6 +48,7 @@ public class DriverEntity {
     public StatusDriverEntity getEntryStatus() {
         return entryStatus;
     }
+
 
     public void setEntryStatus(StatusDriverEntity entryStatus) {
         this.entryStatus = entryStatus;

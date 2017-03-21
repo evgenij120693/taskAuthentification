@@ -21,8 +21,16 @@ public class AutoEntity {
     @Column(name = "color")
     private String color;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "entryAuto")
+    @OneToMany( mappedBy = "entryAuto")
     private Set<DriverEntity> driverEntity;
+
+    public Set<DriverEntity> getDriverEntity() {
+        return driverEntity;
+    }
+
+    public void setDriverEntity(Set<DriverEntity> driverEntity) {
+        this.driverEntity = driverEntity;
+    }
 
     public String getMarka() {
         return marka;

@@ -23,7 +23,6 @@ dependencies {
     // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk16
     compile group: 'org.bouncycastle', name: 'bcprov-jdk16', version: '1.45'
 
-
     compile group: 'org.springframework', name: 'spring-webmvc', version: '4.3.5.RELEASE'
     // https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
     compile group: 'org.springframework.security', name: 'spring-security-core', version: '4.2.2.RELEASE'
@@ -40,7 +39,13 @@ dependencies {
     // https://mvnrepository.com/artifact/ma.glasnost.orika/orika-core
     compile group: 'ma.glasnost.orika', name: 'orika-core', version: '1.5.0'
 
+    //compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.2.8.Final'
+    compile group: 'org.springframework.data', name: 'spring-data-jpa', version: '1.11.1.RELEASE'
+    /*compile group: 'org.springframework', name: 'spring-aspects', version: '4.3.7.RELEASE'*/
+    /*compile group: 'joda-time', name: 'joda-time', version: '2.9.7'
+    compile group: 'joda-time', name: 'joda-time-hibernate', version: '1.4'*/
 
+    compile group: 'org.springframework', name: 'spring-orm', version: '4.3.7.RELEASE'
 
 
 

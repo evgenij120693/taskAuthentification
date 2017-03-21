@@ -18,10 +18,19 @@ public class StatusDriverEntity {
     @Column
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "entryStatus")
+    @OneToMany( mappedBy = "entryStatus")
     private Set<DriverEntity> driverEntities;
 
     public StatusDriverEntity() {
+    }
+
+
+    public Set<DriverEntity> getDriverEntities() {
+        return driverEntities;
+    }
+
+    public void setDriverEntities(Set<DriverEntity> driverEntities) {
+        this.driverEntities = driverEntities;
     }
 
     public String getDescription() {
