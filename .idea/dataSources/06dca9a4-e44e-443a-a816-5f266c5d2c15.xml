@@ -253,17 +253,36 @@
       <DataType>varchar(150)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="63" parent="12" name="id_idx">
+    <column id="63" parent="12" name="start_end">
+      <Position>11</Position>
+      <DataType>varchar(255)|0</DataType>
+    </column>
+    <column id="64" parent="12" name="idClient">
+      <Position>12</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="65" parent="12" name="idDriver">
+      <Position>13</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="66" parent="12" name="idStatus">
+      <Position>14</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="67" parent="12" name="id_idx">
       <ColNames>id_client</ColNames>
     </index>
-    <index id="64" parent="12" name="status_idx">
+    <index id="68" parent="12" name="status_idx">
       <ColNames>id_status</ColNames>
     </index>
-    <key id="65" parent="12" name="PRIMARY">
+    <key id="69" parent="12" name="PRIMARY">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="66" parent="12" name="client">
+    <foreign-key id="70" parent="12" name="client">
       <ColNames>id_client</ColNames>
       <RefSchemaName>taxi</RefSchemaName>
       <RefTableName>client</RefTableName>
@@ -271,7 +290,7 @@
       <OnUpdate>no-action</OnUpdate>
       <OnDelete>delete</OnDelete>
     </foreign-key>
-    <foreign-key id="67" parent="12" name="status">
+    <foreign-key id="71" parent="12" name="status">
       <ColNames>id_status</ColNames>
       <RefSchemaName>taxi</RefSchemaName>
       <RefTableName>status_order</RefTableName>
@@ -279,73 +298,73 @@
       <OnUpdate>no-action</OnUpdate>
       <OnDelete>set-null</OnDelete>
     </foreign-key>
-    <column id="68" parent="13" name="id">
+    <column id="72" parent="13" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="69" parent="13" name="send_email">
+    <column id="73" parent="13" name="send_email">
       <Position>2</Position>
       <DataType>tinyint(4)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="70" parent="13" name="PRIMARY">
+    <key id="74" parent="13" name="PRIMARY">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="71" parent="14" name="id">
+    <column id="75" parent="14" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="72" parent="14" name="name">
+    <column id="76" parent="14" name="name">
       <Position>2</Position>
       <DataType>varchar(45)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="73" parent="14" name="description">
+    <column id="77" parent="14" name="description">
       <Position>3</Position>
       <DataType>varchar(155)|0</DataType>
     </column>
-    <column id="74" parent="14" name="email">
+    <column id="78" parent="14" name="email">
       <Position>4</Position>
       <DataType>varchar(255)|0</DataType>
     </column>
-    <column id="75" parent="14" name="login">
+    <column id="79" parent="14" name="login">
       <Position>5</Position>
       <DataType>varchar(255)|0</DataType>
     </column>
-    <column id="76" parent="14" name="password">
+    <column id="80" parent="14" name="password">
       <Position>6</Position>
       <DataType>varchar(255)|0</DataType>
     </column>
-    <column id="77" parent="14" name="sendEmailFlag">
+    <column id="81" parent="14" name="sendEmailFlag">
       <Position>7</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="78" parent="14" name="PRIMARY">
+    <key id="82" parent="14" name="PRIMARY">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="79" parent="15" name="id">
+    <column id="83" parent="15" name="id">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="80" parent="15" name="name">
+    <column id="84" parent="15" name="name">
       <Position>2</Position>
       <DataType>varchar(45)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="81" parent="15" name="description">
+    <column id="85" parent="15" name="description">
       <Position>3</Position>
       <DataType>varchar(155)|0</DataType>
     </column>
-    <key id="82" parent="15" name="PRIMARY">
+    <key id="86" parent="15" name="PRIMARY">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>

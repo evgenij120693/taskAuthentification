@@ -1,6 +1,7 @@
 package ru.svetozarov.models.entity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Created by Шмыга on 25.02.2017.
@@ -31,6 +32,9 @@ public class DriverEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_status")
     private StatusDriverEntity entryStatus;
+
+    @OneToMany( mappedBy = "entityDriver")
+    private Set<OrderEntity> orderEntities;
 
 
     public AutoEntity getEntryAuto() {

@@ -5,6 +5,8 @@ import javax.persistence.*;
 /**
  * Created by Шмыга on 01.03.2017.
  */
+@Entity
+@Table(name = "order", schema = "taxi")
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +31,10 @@ public class OrderEntity {
 
     @ManyToOne
     @JoinColumn(name = "id_driver")
-
     private DriverEntity entityDriver;
     @Column(name = "start_date")
     private String dateStart;
-    @Column(name = "start_end")
+    @Column(name = "end_date")
     private String dateEnd;
 
     private int idStatus;

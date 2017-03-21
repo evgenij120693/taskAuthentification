@@ -1,6 +1,7 @@
 package ru.svetozarov.models.entity;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Created by Шмыга on 25.02.2017.
@@ -25,15 +26,8 @@ public class ClientEntity {
     @Column
     private String password;
 
-    public ClientEntity(int id, String name, String sex, String phone, String email, String login, String password) {
-        this.id = id;
-        this.name = name;
-        this.sex = sex;
-        this.phone = phone;
-        this.email = email;
-        this.login = login;
-        this.password = password;
-    }
+    @OneToMany( mappedBy = "entityClient")
+    private Set<OrderEntity> orderEntities;
 
 
 

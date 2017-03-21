@@ -4,10 +4,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.svetozarov.common.exception.ConnectorException;
 import ru.svetozarov.common.exception.UserDAOException;
+import ru.svetozarov.common.util.Factory;
 import ru.svetozarov.models.connector.Connector;
 import ru.svetozarov.models.pojo.User;
 import org.apache.log4j.Logger;
 
+import javax.persistence.EntityManagerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,6 +21,8 @@ import java.sql.SQLException;
 @Repository(value = "userDAO")
 public class UserDAO implements IUserDAO {
 
+    private static final EntityManagerFactory FACTORY =
+            Factory.getFACTORY();
 
     private static Logger logger = Logger.getLogger(UserDAO.class);
     private  final String QUERY_SELECT_ALL_BY_LOGIN = "select login, password from taxi.admin" +

@@ -8,7 +8,7 @@ import java.util.Set;
  * Created by Шмыга on 26.02.2017.
  */
 @Entity
-@Table(name = "status_driver", schema = "taxi")
+@Table(name = "status_order", schema = "taxi")
 public class StatusOrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,8 +18,8 @@ public class StatusOrderEntity {
     @Column
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "entryStatus")
-    private Set<OrderEntity>orderEntities;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "entytiStatus")
+    private Set<OrderEntity> orderEntity;
 
     public StatusOrderEntity() {
     }
