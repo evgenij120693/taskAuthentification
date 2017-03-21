@@ -2,6 +2,7 @@ package ru.svetozarov.models.entity;
 
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Created by Шмыга on 26.02.2017.
@@ -16,6 +17,9 @@ public class StatusOrderEntity {
     private String name;
     @Column
     private String description;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "entryStatus")
+    private Set<OrderEntity>orderEntities;
 
     public StatusOrderEntity() {
     }

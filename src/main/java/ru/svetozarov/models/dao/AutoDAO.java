@@ -4,10 +4,18 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.svetozarov.common.exception.AutoDAOException;
 import ru.svetozarov.common.exception.ConnectorException;
+import ru.svetozarov.common.util.Factory;
 import ru.svetozarov.models.connector.Connector;
+import ru.svetozarov.models.entity.AutoEntity;
+import ru.svetozarov.models.mapper_entity.AutoMapper;
 import ru.svetozarov.models.pojo.Auto;
 import org.apache.log4j.Logger;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,30 +34,27 @@ public class AutoDAO implements IAutoDAO {
             "VALUE (?,?,?,?)";
     private  final String QUERY_DELETE_AUTO_BY_ID = "delete from taxi.auto where id=?";
 
+    private static final EntityManagerFactory FACTORY =
+            Factory.getFACTORY();
+
     @Override
     public  List<Auto> getAllAuto() throws AutoDAOException {
         List<Auto> list = new ArrayList<>();
-        try (Connection conn = Connector.getConnection()) {
-            Statement statement = conn.createStatement();
-            ResultSet resultSet = statement.executeQuery(QUERY_SELECT_ALL_AUTO);
-            while (resultSet.next()){
-                logger.trace("Select auto "+resultSet.getString("model"));
-                Auto auto = new Auto(
-                        resultSet.getInt("id"),
-                        resultSet.getString("marka"),
-                        resultSet.getString("model"),
-                        resultSet.getString("reg_number"),
-                        resultSet.getString("color")
-                );
-                list.add(auto);
+        EntityManager em = FACTORY.createEntityManager();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<AutoEntity> criteriaQuery = criteriaBuilder.createQuery(AutoEntity.class);
+        Root<AutoEntity> root = criteriaQuery.from(AutoEntity.class);
+        criteriaQuery.select(root);
+        /*criteriaQuery.where(
+                criteriaBuilder.and(
+                )
+        );*/
+        List<AutoEntity> listAutoEntity = em.createQuery(criteriaQuery).getResultList();
 
-            }
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new AutoDAOException();
-        } catch (ConnectorException e) {
-            logger.error(e);
-            throw new AutoDAOException();
+        for (AutoEntity auto :
+                listAutoEntity) {
+
+            list.add(AutoMapper.converterToAuto(auto));
         }
         return list;
     }
@@ -57,81 +62,43 @@ public class AutoDAO implements IAutoDAO {
     @Override
     public  Auto getAutoById(int id) throws AutoDAOException {
         Auto auto = null;
-        try (Connection conn = Connector.getConnection()) {
-           PreparedStatement statement = conn.prepareStatement(QUERY_SELECT_AUTO_BY_ID);
-           statement.setInt(1, id);
-            ResultSet resultSet = statement.executeQuery();
-            if(resultSet.next()){
-                logger.trace("Select auto by id="+id+" marka "+resultSet.getString("marka"));
-                auto = new Auto(
-                        resultSet.getInt("id"),
-                        resultSet.getString("marka"),
-                        resultSet.getString("model"),
-                        resultSet.getString("reg_number"),
-                        resultSet.getString("color")
-                );
-            }else{
-                logger.trace("Select auto by id="+id+" marka "+resultSet.getString("marka")+" FAILED");
-            }
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new AutoDAOException();
-        } catch (ConnectorException e) {
-            logger.error(e);
-            throw new AutoDAOException();
-        }
+        EntityManager em = FACTORY.createEntityManager();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<AutoEntity> criteriaQuery = criteriaBuilder.createQuery(AutoEntity.class);
+        Root<AutoEntity> root = criteriaQuery.from(AutoEntity.class);
+        criteriaQuery.select(root);
+        criteriaQuery.where(
+                criteriaBuilder.and(
+                        criteriaBuilder.equal(root.get("id"), id)
+                )
+        );
+        List<AutoEntity> listAutoEntity = em.createQuery(criteriaQuery).getResultList();
+        auto = AutoMapper.converterToAuto(listAutoEntity.get(0));
         return auto;
     }
 
     @Override
     public  boolean updateAuto(Auto auto) throws AutoDAOException {
-        try (Connection conn = Connector.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(QUERY_UPDATE_AUTO);
-            statement.setString(1, auto.getMarka());
-            statement.setString(2, auto.getModel());
-            statement.setString(3, auto.getRegNumber());
-            statement.setString(4, auto.getColor());
-            statement.setInt(5, auto.getId() );
-           int count = statement.executeUpdate();
-            if(count > 0){
-                logger.trace("Update auto by id="+auto.getId()+" successful");
-                return true;
-            }else{
-                logger.trace("Update auto by id="+auto.getId()+" FAILED");
-            }
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new AutoDAOException();
-        } catch (ConnectorException e) {
-            logger.error(e);
-            throw new AutoDAOException();
-        }
-        return false;
+        AutoEntity autoEntity = AutoMapper.converterToAutoEntity(auto);
+        EntityManager em = FACTORY.createEntityManager();
+        em.getTransaction().begin();
+        em.merge(autoEntity);
+        em.getTransaction().commit();
+        logger.trace("Result update client"+em.contains(autoEntity));
+        em.close();
+        return true;
     }
 
     @Override
     public  boolean addAuto(Auto auto) throws AutoDAOException {
-        try (Connection conn = Connector.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(QUERY_ADD_AUTO);
-            statement.setString(1, auto.getMarka());
-            statement.setString(2, auto.getModel());
-            statement.setString(3, auto.getRegNumber());
-            statement.setString(4, auto.getColor());
-            int count = statement.executeUpdate();
-            if(count > 0){
-                logger.trace("Add auto by id="+auto.getId()+" successful");
-                return true;
-            }else{
-                logger.trace("Add auto by id="+auto.getId()+" FAILED");
-            }
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new AutoDAOException();
-        } catch (ConnectorException e) {
-            logger.error(e);
-            throw new AutoDAOException();
-        }
-        return false;
+        AutoEntity autoEntity = AutoMapper.converterToAutoEntity(auto);
+        EntityManager em = FACTORY.createEntityManager();
+        em.getTransaction().begin();
+        em.merge(autoEntity);
+        em.getTransaction().commit();
+        logger.trace("Result add auto"+em.contains(autoEntity));
+        em.close();
+        return true;
     }
 
     @Override

@@ -1,22 +1,45 @@
 package ru.svetozarov.models.entity;
 
+import javax.persistence.*;
+
 /**
  * Created by Шмыга on 01.03.2017.
  */
 public class OrderEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private int idClient;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_client")
     private ClientEntity entityClient;
+
+
+    @Column(name = "date_registration")
     private String dateRegistration;
+    @Column(name = "punkt_a")
     private String punktA;
+    @Column(name = "punkt_b")
     private String punktB;
+    @Column(name = "price")
     private int price;
     private int idDriver;
+
+    @ManyToOne
+    @JoinColumn(name = "id_driver")
+
     private DriverEntity entityDriver;
+    @Column(name = "start_date")
     private String dateStart;
+    @Column(name = "start_end")
     private String dateEnd;
+
     private int idStatus;
-    private StatusDriverEntity entytiStatus;
+    @ManyToOne
+    @JoinColumn(name = "id_status")
+    private StatusOrderEntity entytiStatus;
 
 
 
@@ -43,11 +66,11 @@ public class OrderEntity {
         this.entityDriver = entityDriver;
     }
 
-    public StatusDriverEntity getEntytiStatus() {
+    public StatusOrderEntity getEntytiStatus() {
         return entytiStatus;
     }
 
-    public void setEntytiStatus(StatusDriverEntity entytiStatus) {
+    public void setEntytiStatus(StatusOrderEntity entytiStatus) {
         this.entytiStatus = entytiStatus;
     }
 

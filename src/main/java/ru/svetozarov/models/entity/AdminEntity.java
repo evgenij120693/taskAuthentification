@@ -6,16 +6,20 @@ import javax.persistence.*;
  * Created by Шмыга on 24.02.2017.
  */
 @Entity
-@Table(name = "status_driver", schema = "taxi")
+@Table(name = "admin", schema = "taxi")
 public class AdminEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "")
+    @Column(name = "login")
     private String login;
+    @Column(name = "password")
     private String password;
+    @Column(name = "name")
     private String name;
+    @Column(name = "email")
     private String email;
+    @Column(name = "send_email_flag")
     private int sendEmailFlag;
 
     public AdminEntity() {

@@ -4,10 +4,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.svetozarov.common.exception.ClientDAOException;
 import ru.svetozarov.common.exception.ConnectorException;
+import ru.svetozarov.common.util.Factory;
 import ru.svetozarov.models.connector.Connector;
+import ru.svetozarov.models.entity.ClientEntity;
+import ru.svetozarov.models.mapper_entity.ClientMapper;
 import ru.svetozarov.models.pojo.Client;
 import org.apache.log4j.Logger;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +27,8 @@ import java.util.List;
 @Repository(value = "clientDAO")
 public class ClientDAO implements IClientDAO {
     private static Logger logger = Logger.getLogger(ClientDAO.class);
+    private static final EntityManagerFactory FACTORY =
+            Factory.getFACTORY();
     private  final String QUERY_SELECT_ALL = "select * from taxi.client";
     private  final String QUERY_SELECT_CLIENT_BY_LOGIN_AND_PASSWORD = "select * from taxi.client " +
             "where login=? and password=?";
@@ -31,28 +42,21 @@ public class ClientDAO implements IClientDAO {
     @Override
     public  List<Client> getAllClient() throws ClientDAOException {
         List<Client> list = new ArrayList<>();
-        try (Connection conn = Connector.getConnection()) {
-            Statement statement = conn.createStatement();
-            ResultSet resultSet = statement.executeQuery(QUERY_SELECT_ALL);
-            while (resultSet.next()) {
-                logger.trace("result select " + resultSet.getString("name"));
-                Client client = new Client(
-                        resultSet.getInt("id"),
-                        resultSet.getString("name"),
-                        resultSet.getString("sex"),
-                        resultSet.getString("phone"),
-                        resultSet.getString("email"),
-                        resultSet.getString("login"),
-                        resultSet.getString("password")
-                );
-                list.add(client);
-            }
-        } catch (ConnectorException e) {
-            logger.error(e);
-            throw new ClientDAOException();
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new ClientDAOException();
+        EntityManager em = FACTORY.createEntityManager();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<ClientEntity> criteriaQuery = criteriaBuilder.createQuery(ClientEntity.class);
+        Root<ClientEntity> root = criteriaQuery.from(ClientEntity.class);
+        criteriaQuery.select(root);
+        /*criteriaQuery.where(
+                criteriaBuilder.and(
+                )
+        );*/
+        List<ClientEntity> listDriverEntity = em.createQuery(criteriaQuery).getResultList();
+
+        for (ClientEntity client :
+                listDriverEntity) {
+
+            list.add(ClientMapper.converterToClient(client));
         }
         return list;
     }
@@ -60,37 +64,34 @@ public class ClientDAO implements IClientDAO {
     @Override
     public  boolean addClient(Client client) throws ClientDAOException {
 
-        try (Connection conn = Connector.getConnection()) {
-            PreparedStatement statement = null;
-            statement = conn.prepareStatement(QUERY_INSERT_CLIENT);
-            statement.setString(1, client.getName());
-            statement.setString(2, client.getSex());
-            statement.setString(3, client.getPhone());
-            statement.setString(4, client.getEmail());
-            statement.setString(5, client.getLogin());
-            statement.setString(6, client.getPassword());
-            int count = statement.executeUpdate();
-            if (count > 0) {
-                logger.trace("Inser t client " + client.getName() + " succesfull");
-                return true;
-            } else {
-                logger.trace("Inser t client " + client.getName() + " failed");
-            }
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new ClientDAOException();
-        } catch (ConnectorException e) {
-            logger.error(e);
-            throw new ClientDAOException();
-        }
-        return false;
+        ClientEntity clientEntity = ClientMapper.converterToClientEntity(client);
+        EntityManager em = FACTORY.createEntityManager();
+        em.getTransaction().begin();
+        em.merge(clientEntity);
+        em.getTransaction().commit();
+        logger.trace("Result insert client"+em.contains(clientEntity));
+        em.close();
+        return true;
     }
 
     @Override
     public  Client getClientByLoginAndPassword(String login, String password) throws ClientDAOException {
         Client client = null;
-
-        try (Connection conn = Connector.getConnection();
+        EntityManager em = FACTORY.createEntityManager();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<ClientEntity> criteriaQuery = criteriaBuilder.createQuery(ClientEntity.class);
+        Root<ClientEntity> root = criteriaQuery.from(ClientEntity.class);
+        criteriaQuery.select(root);
+        criteriaQuery.where(
+                criteriaBuilder.and(
+                        criteriaBuilder.equal(root.get("login"), login),
+                        criteriaBuilder.equal(root.get("password"), password)
+                )
+        );
+        List<ClientEntity> listClientEntity = em.createQuery(criteriaQuery).getResultList();
+        client = ClientMapper.converterToClient(listClientEntity.get(0));
+        return client;
+        /*try (Connection conn = Connector.getConnection();
              PreparedStatement prepSt = conn.prepareStatement(QUERY_SELECT_CLIENT_BY_LOGIN_AND_PASSWORD)) {
             prepSt.setString(1, login);
             prepSt.setString(2, password);
@@ -117,66 +118,37 @@ public class ClientDAO implements IClientDAO {
             logger.error(e);
             throw new ClientDAOException();
         }
-        return client;
+        return client;*/
     }
 
     @Override
     public  Client getClientById(int id) throws ClientDAOException {
         Client client = null;
-
-        try (Connection conn = Connector.getConnection();
-             PreparedStatement prepSt = conn.prepareStatement(QUERY_SELECY_CLIENT_BY_ID)) {
-            prepSt.setInt(1, id);
-            ResultSet resultSet = prepSt.executeQuery();
-            if (resultSet.next()) {
-                logger.trace("client " + resultSet.getString(2));
-                client = new Client(
-                        resultSet.getInt(1),
-                        resultSet.getString(2),
-                        resultSet.getString(3),
-                        resultSet.getString(4),
-                        resultSet.getString(5),
-                        resultSet.getString(6),
-                        resultSet.getString(7)
-                );
-            }
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new ClientDAOException();
-        } catch (ConnectorException e) {
-            logger.error(e);
-            throw new ClientDAOException();
-        }
+        EntityManager em = FACTORY.createEntityManager();
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<ClientEntity> criteriaQuery = criteriaBuilder.createQuery(ClientEntity.class);
+        Root<ClientEntity> root = criteriaQuery.from(ClientEntity.class);
+        criteriaQuery.select(root);
+        criteriaQuery.where(
+                criteriaBuilder.and(
+                        criteriaBuilder.equal(root.get("id"), id)
+                )
+        );
+        List<ClientEntity> listClientEntity = em.createQuery(criteriaQuery).getResultList();
+        client = ClientMapper.converterToClient(listClientEntity.get(0));
         return client;
     }
 
     @Override
     public  boolean updateClient(Client client) throws ClientDAOException {
-        try (Connection conn = Connector.getConnection()) {
-            PreparedStatement statement = null;
-            statement = conn.prepareStatement(QUERY_UPDATE_CLIENT);
-            statement.setString(1, client.getName());
-            statement.setString(2, client.getSex());
-            statement.setString(3, client.getPhone());
-            statement.setString(4, client.getEmail());
-            statement.setString(5, client.getLogin());
-            statement.setString(6, client.getPassword());
-            statement.setInt(7, client.getId());
-            int count = statement.executeUpdate();
-            if (count > 0) {
-                logger.trace("Update client " + client.getName() + " succesfull");
-                return true;
-            } else {
-                logger.trace("Update  client " + client.getName() + " failed");
-            }
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new ClientDAOException();
-        } catch (ConnectorException e) {
-            logger.error(e);
-            throw new ClientDAOException();
-        }
-        return false;
+        ClientEntity clientEntity = ClientMapper.converterToClientEntity(client);
+        EntityManager em = FACTORY.createEntityManager();
+        em.getTransaction().begin();
+        em.merge(clientEntity);
+        em.getTransaction().commit();
+        logger.trace("Result update client"+em.contains(clientEntity));
+        em.close();
+        return true;
     }
 
     @Override

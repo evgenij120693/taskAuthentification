@@ -18,8 +18,8 @@ dependencies {
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
     // https://mvnrepository.com/artifact/javax.mail/mail
     compile group: 'javax.mail', name: 'mail', version: '1.4'
-//    compile group: 'org.springframework', name: 'spring-context', version: '4.3.5.RELEASE'
-//    compile group: 'org.springframework', name: 'spring-web', version: '4.3.5.RELEASE'
+    compile group: 'org.springframework', name: 'spring-context', version: '4.3.5.RELEASE'
+    compile group: 'org.springframework', name: 'spring-web', version: '4.3.5.RELEASE'
     // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk16
     compile group: 'org.bouncycastle', name: 'bcprov-jdk16', version: '1.45'
 
@@ -37,9 +37,11 @@ dependencies {
     compile group: 'org.webjars', name: 'bootstrap', version: '3.2.0'
     // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.2.8.Final'
-
     // https://mvnrepository.com/artifact/ma.glasnost.orika/orika-core
     compile group: 'ma.glasnost.orika', name: 'orika-core', version: '1.5.0'
+
+
+
 
 
 }

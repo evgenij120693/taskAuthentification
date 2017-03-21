@@ -1,15 +1,28 @@
 package ru.svetozarov.models.entity;
 
+import javax.persistence.*;
+
 /**
  * Created by Шмыга on 25.02.2017.
  */
+
+@Entity
+@Table(name = "client", schema = "taxi")
 public class ClientEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column
     private String name;
+    @Column
     private String sex;
+    @Column
     private String phone;
+    @Column
     private String email;
+    @Column
     private String login;
+    @Column
     private String password;
 
     public ClientEntity(int id, String name, String sex, String phone, String email, String login, String password) {
@@ -21,6 +34,8 @@ public class ClientEntity {
         this.login = login;
         this.password = password;
     }
+
+
 
     public String getLogin() {
         return login;

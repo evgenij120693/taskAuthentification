@@ -16,7 +16,7 @@ public class AutoEntity {
     private String marka;
     @Column(name = "model")
     private String model;
-    @Column(name = "regNumber")
+    @Column(name = "reg_number")
     private String regNumber;
     @Column(name = "color")
     private String color;
