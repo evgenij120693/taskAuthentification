@@ -1,5 +1,6 @@
 package ru.svetozarov.models.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.svetozarov.common.exception.UserDAOException;
@@ -11,6 +12,7 @@ import ru.svetozarov.models.entity.AdminEntity;
 import ru.svetozarov.models.mapper_entity.AdminMapper;
 import ru.svetozarov.models.pojo.Admin;
 import org.apache.log4j.Logger;
+import ru.svetozarov.models.repository.AdminRepository;
 
 import javax.persistence.EntityManager;
 
@@ -18,6 +20,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,8 +30,17 @@ import java.util.List;
 /**
  * Created by Шмыга on 24.02.2017.
  */
+@Transactional
 @Repository(value = "adminDAO")
 public class AdminDAO implements IAdminDAO {
+
+    AdminRepository adminRepository;
+
+    @Autowired
+    public void setAdminRepository(AdminRepository adminRepository) {
+        this.adminRepository = adminRepository;
+    }
+
     private static Logger logger = Logger.getLogger(AdminDAO.class);
     private static final EntityManagerFactory FACTORY =
             Factory.getFACTORY();
@@ -48,69 +60,31 @@ public class AdminDAO implements IAdminDAO {
     public Admin getAdminByLoginAndPassword(String login, String password)
             throws UserDAOException {
         Admin admin = null;
-        EntityManager em = FACTORY.createEntityManager();
-        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        CriteriaQuery<AdminEntity> criteriaQuery = criteriaBuilder.createQuery(AdminEntity.class);
-        Root<AdminEntity> root = criteriaQuery.from(AdminEntity.class);
-        criteriaQuery.select(root);
-        criteriaQuery.where(
-                criteriaBuilder.and(
-                        criteriaBuilder.equal(root.get("login"), login),
-                        criteriaBuilder.equal(root.get("password"), password)
-                )
-        );
-        List<AdminEntity> adminEntityList = em.createQuery(criteriaQuery).getResultList();
-        admin = AdminMapper.converterToAdmin(adminEntityList.get(0));
+        List<AdminEntity> list = adminRepository.findByLoginAndPassword(login, password);
+        admin = AdminMapper.converterToAdmin(list.get(0));
         return admin;
     }
 
 
     private boolean checkUserByLogin(String login) throws UserDAOException {
         Admin admin = null;
-        EntityManager em = FACTORY.createEntityManager();
-        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        CriteriaQuery<AdminEntity> criteriaQuery = criteriaBuilder.createQuery(AdminEntity.class);
-        Root<AdminEntity> root = criteriaQuery.from(AdminEntity.class);
-        criteriaQuery.select(root);
-        criteriaQuery.where(
-                criteriaBuilder.and(
-                        criteriaBuilder.equal(
-                                root.get("login"), login)
-                )
-        );
-        List<AdminEntity> adminEntityList = em.createQuery(criteriaQuery).getResultList();
-        admin = AdminMapper.converterToAdmin(adminEntityList.get(0));
+        List<AdminEntity> list = adminRepository.findByLogin(login);
+        admin = AdminMapper.converterToAdmin(list.get(0));
         return (admin == null) ? true : false;
     }
 
     @Override
     public Admin getAdminById(int id) throws UserDAOException {
         Admin admin = null;
-        EntityManager em = FACTORY.createEntityManager();
-        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        CriteriaQuery<AdminEntity> criteriaQuery = criteriaBuilder.createQuery(AdminEntity.class);
-        Root<AdminEntity> root = criteriaQuery.from(AdminEntity.class);
-        criteriaQuery.select(root);
-        criteriaQuery.where(
-                criteriaBuilder.and(
-                        criteriaBuilder.equal(
-                                root.get("id"), id)
-                )
-        );
-        List<AdminEntity> adminEntityList = em.createQuery(criteriaQuery).getResultList();
-        admin = AdminMapper.converterToAdmin(adminEntityList.get(0));
+        AdminEntity driverEntities = adminRepository.findOne(id);
+        admin = AdminMapper.converterToAdmin(driverEntities);
         return admin;
     }
 
     @Override
     public boolean updateAdmin(Admin admin) throws UserDAOException {
         AdminEntity adminEntity = AdminMapper.converterToAdminEntity(admin);
-        EntityManager em = FACTORY.createEntityManager();
-        em.getTransaction().begin();
-        em.merge(adminEntity);
-        em.getTransaction().commit();
-        logger.trace("Result update admin" + em.contains(adminEntity));
-        em.close();
+        adminRepository.save(adminEntity);
         return true;
     }
 

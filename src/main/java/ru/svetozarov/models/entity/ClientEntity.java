@@ -26,8 +26,8 @@ public class ClientEntity {
     @Column
     private String password;
 
-    /*@OneToMany( mappedBy = "entityClient")
-    private Set<OrderEntity> orderEntities;*/
+    @OneToMany( mappedBy = "entityClient")
+    private Set<OrderEntity> orderEntities;
 
 
 

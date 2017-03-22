@@ -10,7 +10,7 @@ import ru.svetozarov.models.pojo.Status;
  * Created by Evgenij on 21.03.2017.
  */
 public class StatusOrderMapper {
-    public static Status converterToStatusDriver(StatusOrderEntity statusOrderEntity){
+    public static Status converterToStatusOrder(StatusOrderEntity statusOrderEntity){
         MapperFactory factory = new DefaultMapperFactory.Builder().build();
         factory.classMap(StatusOrderEntity.class, Status.class).
                 field("id", "id").
@@ -21,7 +21,7 @@ public class StatusOrderMapper {
         Status status = mapperFacade.map(statusOrderEntity, Status.class);
         return status;
     }
-    public static StatusOrderEntity converterToStatusDriverEntity(Status status){
+    public static StatusOrderEntity converterToStatusOrderEntity(Status status){
         MapperFactory factory = new DefaultMapperFactory.Builder().build();
         factory.classMap(Status.class, StatusOrderEntity.class).
                 field("id", "id").

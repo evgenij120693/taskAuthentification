@@ -6,18 +6,13 @@ import org.springframework.stereotype.Repository;
 import ru.svetozarov.common.exception.*;
 import ru.svetozarov.common.util.Factory;
 import ru.svetozarov.models.connector.Connector;
-import ru.svetozarov.models.entity.ClientEntity;
 import ru.svetozarov.models.entity.OrderEntity;
-import ru.svetozarov.models.entity.OrderEntity;
+import ru.svetozarov.models.mapper_entity.OrderMapper;
 import ru.svetozarov.models.pojo.Order;
 import org.apache.log4j.Logger;
+import ru.svetozarov.models.repository.OrderRepository;
 
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +44,13 @@ public class OrderDAO implements IOrderDAO {
     @Qualifier("clientDAO")
     public void setClientDAO(IClientDAO IClientDAO) {
         this.IClientDAO = IClientDAO;
+    }
+
+
+    OrderRepository orderRepository;
+    @Autowired
+    public void setOrderRepository(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
     }
 
     public static Logger logger = Logger.getLogger(OrderDAO.class);
@@ -151,63 +153,11 @@ public class OrderDAO implements IOrderDAO {
     @Override
     public  List<Order> getListOrderHistoryByClient(int id_client) throws OrderDAOException {
         List<Order> list = new ArrayList<>();
-        EntityManager em = FACTORY.createEntityManager();
-        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        CriteriaQuery<OrderEntity> criteriaQuery = criteriaBuilder.createQuery(OrderEntity.class);
-        Root<OrderEntity> root = criteriaQuery.from(OrderEntity.class);
-        criteriaQuery.select(root);
-        ClientEntity clientEntity = new ClientEntity();
-        clientEntity.setId(id_client);
-        criteriaQuery.where(
-                criteriaBuilder.and(
-                            criteriaBuilder.equal(root.get("entityClient"), clientEntity)
-                )
-        );
-        List<OrderEntity> listClientEntity = em.createQuery(criteriaQuery).getResultList();
-        for (OrderEntity orderEntity :
-             listClientEntity) {
-            System.out.println(orderEntity.getEntityClient().getName() + " login by client");
-
+        List<OrderEntity> orderEntities = orderRepository.findByEntityClientId(id_client);
+        for (OrderEntity order :
+                orderEntities) {
+            list.add(OrderMapper.converterToOrder(order));
         }
-//        try (Connection conn = Connector.getConnection()) {
-//            PreparedStatement statement = conn.prepareStatement(SQL_SELECT_HISTORY_ORDER_BY_CLIENT);
-//            statement.setInt(1, id_client);
-//            ResultSet result = statement.executeQuery();
-//            while (result.next()) {
-//                Order order = null;
-//                try {
-//                    order = new Order(
-//                            result.getInt(1),
-//                            IClientDAO.getClientById(result.getInt(2)),
-//                            result.getString(3),
-//                            result.getString(4),
-//                            result.getString(5),
-//                            result.getInt(6),
-//                            IDriverDAO.getDriverByIdJoinAutoAndStatus(result.getInt(7)),
-//                            result.getString(8),
-//                            result.getString(9),
-//                            IStatusDAO.getStatusOrderById(result.getInt(10))
-//                    );
-//                } catch (ClientDAOException e) {
-//                    logger.error(e);
-//                    throw new OrderDAOException();
-//                } catch (DriverDAOException e) {
-//                    logger.error(e);
-//                    throw new OrderDAOException();
-//                } catch (StatusDAOException e) {
-//                    logger.error(e);
-//                    throw new OrderDAOException();
-//                }
-//                list.add(order);
-//            }
-//
-//        } catch (ConnectorException e) {
-//            logger.error(e);
-//            throw new OrderDAOException();
-//        } catch (SQLException e) {
-//            logger.error(e);
-//            throw new OrderDAOException();
-//        }
         return list;
     }
 

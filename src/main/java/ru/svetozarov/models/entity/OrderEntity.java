@@ -5,8 +5,8 @@ import javax.persistence.*;
 /**
  * Created by Шмыга on 01.03.2017.
  */
-//@Entity
-//@Table(name = "order", schema = "taxi")
+@Entity
+@Table(name = "order", schema = "taxi")
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,8 +14,8 @@ public class OrderEntity {
 
     private int idClient;
 
-    /*@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_client")*/
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_client")
     private ClientEntity entityClient;
 
 
@@ -29,8 +29,8 @@ public class OrderEntity {
     private int price;
     private int idDriver;
 
-   /* @ManyToOne
-    @JoinColumn(name = "id_driver")*/
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_driver", referencedColumnName = "id")
     private DriverEntity entityDriver;
     @Column(name = "start_date")
     private String dateStart;
@@ -38,8 +38,8 @@ public class OrderEntity {
     private String dateEnd;
 
     private int idStatus;
-    /*@ManyToOne
-    @JoinColumn(name = "id_status")*/
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_status", referencedColumnName = "id")
     private StatusOrderEntity entytiStatus;
 
 

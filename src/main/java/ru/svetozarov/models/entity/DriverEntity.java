@@ -32,9 +32,9 @@ public class DriverEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_status", referencedColumnName = "id")
     private StatusDriverEntity entryStatus;
-        private char a='\u0001';
-    /*@OneToMany( mappedBy = "entityDriver")
-    private Set<OrderEntity> orderEntities;*/
+
+    @OneToMany( mappedBy = "entityDriver")
+    private Set<OrderEntity> orderEntities;
 
 
     public AutoEntity getEntryAuto() {

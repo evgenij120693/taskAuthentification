@@ -1,5 +1,6 @@
 package ru.svetozarov.models.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.svetozarov.common.exception.ConnectorException;
@@ -7,7 +8,9 @@ import ru.svetozarov.common.exception.StatusDAOException;
 import ru.svetozarov.models.connector.Connector;
 import ru.svetozarov.models.pojo.Status;
 import org.apache.log4j.Logger;
+import ru.svetozarov.models.repository.StatusOrderRepository;
 
+import javax.transaction.Transactional;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +18,15 @@ import java.util.List;
 /**
  * Created by Шмыга on 26.02.2017.
  */
+@Transactional
 @Repository(value = "statusDAO")
 public class StatusDAO implements IStatusDAO {
+    StatusOrderRepository statusOrderRepository;
+    @Autowired
+    public void setStatusOrderRepository(StatusOrderRepository statusOrderRepository) {
+        this.statusOrderRepository = statusOrderRepository;
+    }
+
     private static Logger logger = Logger.getLogger(StatusDAO.class);
     private  final String QUERY_SELECT_ALL_STATUS_DRIVER = "select * from taxi.status_driver";
     private  final String QUERY_SELECT_STATUS_ORDER_BY_ID = "select * from taxi.status_order where id=?";

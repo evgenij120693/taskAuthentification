@@ -18,10 +18,18 @@ public class StatusOrderEntity {
     @Column
     private String description;
 
-    /*@OneToMany(fetch = FetchType.LAZY, mappedBy = "entytiStatus")
-    private Set<OrderEntity> orderEntity;*/
+    @OneToMany( mappedBy = "entytiStatus")
+    private Set<OrderEntity> orderEntity;
 
     public StatusOrderEntity() {
+    }
+
+    public void setOrderEntity(Set<OrderEntity> orderEntity) {
+        this.orderEntity = orderEntity;
+    }
+
+    public Set<OrderEntity> getOrderEntity() {
+        return orderEntity;
     }
 
     public String getDescription() {

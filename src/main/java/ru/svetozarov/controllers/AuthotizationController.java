@@ -42,7 +42,7 @@ public class AuthotizationController {
     }
 
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String indexGet(HttpSession session){
         if(session.getAttribute("id") != null){
             return "redirect:/"+session.getAttribute("role");
@@ -98,7 +98,7 @@ public class AuthotizationController {
                 modelAndView.setViewName("redirect:/" + user.getRole());
             } else {
                 logger.trace("Authorization failed");
-                modelAndView.addObject("error", "Неверный логин/пароль.");
+                modelAndView.addObject("error", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅ.");
                 modelAndView.setViewName("/login");
                 //resp.sendRedirect("/taxi/login");
             }
