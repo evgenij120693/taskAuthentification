@@ -22,11 +22,13 @@ public class DriverMapper {
                 field("rating", "rating").
                 toClassMap();
         MapperFacade mapperFacade = factory.getMapperFacade();
-        System.out.println(driverEntity.getFirstName() + " driver name");
         Driver driver = mapperFacade.map(driverEntity, Driver.class);
-        driver.setEntryAuto(AutoMapper.converterToAuto(driverEntity.getEntryAuto()));
-        driver.setEntryStatus(StatusDriverMapper.converterToStatusDriver(driverEntity.getEntryStatus()));
-        return driver;
+        if(driver != null) {
+            driver.setEntryAuto(AutoMapper.converterToAuto(driverEntity.getEntryAuto()));
+            driver.setEntryStatus(StatusDriverMapper.converterToStatusDriver(driverEntity.getEntryStatus()));
+            return driver;
+        }
+        return  null;
     }
     public static DriverEntity converterToDriverEntity(Driver driver){
         MapperFactory factory = new DefaultMapperFactory.Builder().build();

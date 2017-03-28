@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import ru.svetozarov.models.repository.OrderRepository;
 
 import javax.persistence.EntityManagerFactory;
+import javax.transaction.Transactional;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 /**
  * Created by Шмыга on 01.03.2017.
  */
+@Transactional
 @Repository(value = "orderDAO")
 public class OrderDAO implements IOrderDAO {
 
@@ -153,7 +155,9 @@ public class OrderDAO implements IOrderDAO {
     @Override
     public  List<Order> getListOrderHistoryByClient(int id_client) throws OrderDAOException {
         List<Order> list = new ArrayList<>();
-        List<OrderEntity> orderEntities = orderRepository.findByEntityClientId(id_client);
+
+        List<OrderEntity> orderEntities = orderRepository.
+                findByEntytiStatusIdNotInAndEntityClientId(new ArrayList<Integer>(){{add(1);}},id_client);
         for (OrderEntity order :
                 orderEntities) {
             list.add(OrderMapper.converterToOrder(order));
@@ -163,46 +167,15 @@ public class OrderDAO implements IOrderDAO {
 
     @Override
     public  Order getListOrderActualByClient(int id_client) throws OrderDAOException {
-       Order order = null;
-        try (Connection conn = Connector.getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(SQL_SELECT_ACTUAL_ORDER_BY_CLIENT_AND_STATUS);
-            statement.setInt(1, id_client);
-            ResultSet result = statement.executeQuery();
-            while (result.next()) {
-                try {
-                    logger.trace("select order by client successfull");
-                    order = new Order(
-                            result.getInt(1),
-                            IClientDAO.getClientById(result.getInt(2)),
-                            result.getString(3),
-                            result.getString(4),
-                            result.getString(5),
-                            result.getInt(6),
-                            IDriverDAO.getDriverById(result.getInt(7)),
-                            result.getString(8),
-                            result.getString(9),
-                            IStatusDAO.getStatusOrderById(result.getInt(10))
-                    );
-                } catch (ClientDAOException e) {
-                    logger.error(e);
-                    throw new OrderDAOException();
-                } catch (DriverDAOException e) {
-                    logger.error(e);
-                    throw new OrderDAOException();
-                } catch (StatusDAOException e) {
-                    logger.error(e);
-                    throw new OrderDAOException();
-                }
-            }
+        List<Order> list = new ArrayList<>();
 
-        } catch (ConnectorException e) {
-            logger.error(e);
-            throw new OrderDAOException();
-        } catch (SQLException e) {
-            logger.error(e);
-            throw new OrderDAOException();
+        List<OrderEntity> orderEntities = orderRepository.
+                findByEntytiStatusIdNotInAndEntityClientId(new ArrayList<Integer>(){{add(4);add(5);}},id_client);
+        for (OrderEntity order :
+                orderEntities) {
+            list.add(OrderMapper.converterToOrder(order));
         }
-        return order;
+        return list.get(0);
     }
 
 

@@ -8,7 +8,7 @@ import java.util.Set;
  */
 
 @Entity
-@Table(name = "client", schema = "taxi")
+@Table(name = "client", schema = "taxi", catalog = "taxi")
 public class ClientEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +30,13 @@ public class ClientEntity {
     private Set<OrderEntity> orderEntities;
 
 
+    public Set<OrderEntity> getOrderEntities() {
+        return orderEntities;
+    }
+
+    public void setOrderEntities(Set<OrderEntity> orderEntities) {
+        this.orderEntities = orderEntities;
+    }
 
     public String getLogin() {
         return login;

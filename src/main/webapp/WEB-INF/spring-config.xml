@@ -51,4 +51,5 @@
     <jpa:repositories base-package="ru.svetozarov.models.repository" entity-manager-factory-ref="emf"
                       transaction-manager-ref="transactionManager"/>
 
+
 </beans>

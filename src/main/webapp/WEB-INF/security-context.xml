@@ -42,15 +42,7 @@ OR hasRole('ROLE_ADMIN') OR hasRole('ROLE_USER') OR hasRole('ROLE_DRIVER')"/>
     </authentication-manager>
 
 
-    <!--<beans:bean id="dataSource"-->
-                <!--class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
 
-        <!--<beans:property name="driverClassName" value="com.mysql.jdbc.Driver" />-->
-        <!--<beans:property name="url"-->
-                        <!--value="jdbc:mysql://localhost:3306/example?useSSL=false" />-->
-        <!--<beans:property name="username" value="root" />-->
-        <!--<beans:property name="password" value="1234" />-->
-    <!--</beans:bean>-->
     <beans:bean id="myUserDetail" class="ru.svetozarov.controllers.CustomUserService">
 
     </beans:bean>

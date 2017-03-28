@@ -25,7 +25,7 @@ public class OrderMapper {
                 field("entytiStatus", "entytiStatus").
                 toClassMap();
         MapperFacade mapperFacade = factory.getMapperFacade();
-        System.out.println(orderEntity.getDateStart() + " order start");
+        //System.out.println(orderEntity.getDateStart() + " order start");
         Order order = mapperFacade.map(orderEntity, Order.class);
         order.setEntityClient(ClientMapper.converterToClient(orderEntity.getEntityClient()));
         order.setEntityDriver(DriverMapper.converterToDriver(orderEntity.getEntityDriver()));

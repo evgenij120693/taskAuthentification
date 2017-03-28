@@ -1,12 +1,16 @@
 package ru.svetozarov.models.entity;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import javax.persistence.*;
 
 /**
  * Created by Шмыга on 01.03.2017.
  */
-@Entity
-@Table(name = "order", schema = "taxi")
+@Entity(name="OrderEntity")
+
+@Table(name = "order", schema = "taxi", catalog = "taxi")
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,8 +18,8 @@ public class OrderEntity {
 
     private int idClient;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_client")
+    @ManyToOne(fetch = FetchType.EAGER )
+    @JoinColumn(name = "id_client", referencedColumnName = "id", nullable = false)
     private ClientEntity entityClient;
 
 
@@ -29,9 +33,10 @@ public class OrderEntity {
     private int price;
     private int idDriver;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER )
     @JoinColumn(name = "id_driver", referencedColumnName = "id")
-    private DriverEntity entityDriver;
+    @NotFound(action = NotFoundAction.IGNORE)
+    private DriverEntity entityDriver = new DriverEntity();
     @Column(name = "start_date")
     private String dateStart;
     @Column(name = "end_date")
