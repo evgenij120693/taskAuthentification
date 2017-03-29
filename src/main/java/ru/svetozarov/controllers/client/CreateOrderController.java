@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.svetozarov.common.exception.OrderDAOException;
+import ru.svetozarov.models.pojo.Client;
+import ru.svetozarov.models.pojo.Driver;
 import ru.svetozarov.models.pojo.Order;
+import ru.svetozarov.models.pojo.Status;
 import ru.svetozarov.services.IOrderService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -61,17 +64,23 @@ public class CreateOrderController {
         try {
             HttpSession session = req.getSession(false);
             int id_client = (int) session.getAttribute("id");
+            Client tempClient = new Client();
+            tempClient.setId(id_client);
+            Status tempStatus = new Status();
+            tempStatus.setId(1);
+            Driver tempDriver = new Driver();
+            tempDriver.setId(1);
             Order order = new Order(
                     0,
-                    id_client,
+                    tempClient,
                     new Timestamp(System.currentTimeMillis()).toString(),
                     punktA,
                     punktB,
                     price,
-                    0,
+                    tempDriver,
                     null,
                     null,
-                    1
+                    tempStatus
             );
 
             if (iOrderService.addOrder(order)) {

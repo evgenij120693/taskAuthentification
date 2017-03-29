@@ -37,4 +37,10 @@ public interface IOrderService {
 
     @Secured("ROLE_USER")
     boolean cancelOrderOfDriver(int id) throws OrderDAOException;
+
+    @Secured({"ROLE_DRIVER", "ROLE_USER"})
+    Order getOrderById(int id);
+
+    @Secured({"ROLE_DRIVER", "ROLE_USER"})
+    List<Order> getActualOrderByDriver(int status)  throws OrderDAOException ;
 }

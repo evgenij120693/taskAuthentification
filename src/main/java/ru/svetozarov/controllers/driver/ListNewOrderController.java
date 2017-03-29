@@ -31,7 +31,7 @@ public class ListNewOrderController {
     public ModelAndView listNewOrderGet(){
         ModelAndView modelAndView = new ModelAndView();
         try{
-            List<Order> list = IOrderService.getListOrderByDriverAndStatus(0, 1);
+            List<Order> list = IOrderService.getActualOrderByDriver( 1);
             modelAndView.addObject("list", list);
             modelAndView.setViewName("/driver/list_new_order");
         }catch (OrderDAOException e){

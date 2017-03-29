@@ -3,7 +3,9 @@ package ru.svetozarov.models.mapper_entity;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
+import ru.svetozarov.models.entity.AutoEntity;
 import ru.svetozarov.models.entity.DriverEntity;
+import ru.svetozarov.models.entity.StatusDriverEntity;
 import ru.svetozarov.models.pojo.Driver;
 
 /**
@@ -43,8 +45,14 @@ public class DriverMapper {
                 toClassMap();
         MapperFacade mapperFacade = factory.getMapperFacade();
         DriverEntity driverEntity  = mapperFacade.map(driver, DriverEntity.class);
-        driverEntity.setEntryAuto(AutoMapper.converterToAutoEntity(driver.getEntryAuto()));
-        driverEntity.setEntryStatus(StatusDriverMapper.converterToStatusDriverEntity(driver.getEntryStatus()));
+        if(driverEntity != null) {
+            driverEntity.setEntryAuto(AutoMapper.converterToAutoEntity(driver.getEntryAuto()));
+            driverEntity.setEntryStatus(StatusDriverMapper.converterToStatusDriverEntity(driver.getEntryStatus()));
+        }
+        else {
+            driverEntity.setEntryAuto(new AutoEntity());
+            driverEntity.setEntryStatus(new StatusDriverEntity());
+        }
         return driverEntity;
     }
 

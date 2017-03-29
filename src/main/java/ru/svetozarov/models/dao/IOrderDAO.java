@@ -30,4 +30,7 @@ public interface IOrderDAO {
     boolean updateOrderClient(Order order) throws OrderDAOException;
 
     boolean cancelOrderClient(int id) throws OrderDAOException ;
+
+    Order getOrderById(int id);
+    List<Order> getActualOrderByDriver(int status)  throws OrderDAOException ;
 }

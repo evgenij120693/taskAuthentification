@@ -12,10 +12,15 @@ import java.util.List;
 /**
  * Created by Evgenij on 23.03.2017.
  */
-public interface OrderRepository extends JpaRepository<OrderEntity, Integer> {
-    //@Query("select b from  OrderEntity b where b.id_client = :id_client and b.id_status=:id_status")
-    List<OrderEntity> findByEntytiStatusIdNotInAndEntityClientId(Collection<Integer> status, int id);
+public interface OrderRepository extends CrudRepository<OrderEntity, Integer> {
 
-    //OrderEntity findByName(@Param("name") String name);
-    //
+    List<OrderEntity> findByEntytiStatusIdNotInAndEntityClientId(Collection<Integer> status, int id);
+    OrderEntity findById(int id);
+    List<OrderEntity> findByEntytiStatusIdInAndEntityDriverIdIn(Collection<Integer> status,
+                                                                Collection<Integer> id_driver);
+
+    List<OrderEntity> findByEntytiStatusIdAndEntityDriverIdIsNull(int status);
+    //List<OrderEntity> findByEntityStatusIdAndEntityDriverIdIn(int id_status, Collection<Integer> )
+
+
 }

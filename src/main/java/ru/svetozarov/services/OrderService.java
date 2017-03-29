@@ -19,6 +19,7 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class OrderService implements IOrderService {
 
+
     private IOrderDAO IOrderDAO;
     @Override
     @Autowired
@@ -58,5 +59,15 @@ public class OrderService implements IOrderService {
     @Override
     public boolean cancelOrderOfDriver(int id) throws OrderDAOException {
         return IOrderDAO.cancelOrderClient(id);
+    }
+
+    @Override
+    public Order getOrderById(int id) {
+        return IOrderDAO.getOrderById(id);
+    }
+
+    @Override
+    public List<Order> getActualOrderByDriver(int status)  throws OrderDAOException  {
+        return IOrderDAO.getActualOrderByDriver(status);
     }
 }

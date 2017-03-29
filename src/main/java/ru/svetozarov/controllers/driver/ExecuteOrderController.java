@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.svetozarov.common.exception.OrderDAOException;
+import ru.svetozarov.models.pojo.Client;
+import ru.svetozarov.models.pojo.Driver;
 import ru.svetozarov.models.pojo.Order;
+import ru.svetozarov.models.pojo.Status;
 import ru.svetozarov.services.IOrderService;
 
 import javax.servlet.http.HttpSession;
@@ -35,20 +38,31 @@ public class ExecuteOrderController {
         ModelAndView modelAndView = new ModelAndView();
         int id_driver = (int) session.getAttribute("id");
         if(id != 0){
-            Order order = new Order(
-                    id,
-                    0,
-                    null,
-                    null,
-                    null,
-                    0,
-                    id_driver,
-                    new Timestamp(System.currentTimeMillis()).toString(),
-                    new Timestamp(System.currentTimeMillis()+60*30).toString(),
-                    4
-            );
+            Driver tempDriver = new Driver();
+            tempDriver.setId(id_driver);
+            Status tempStatus = new Status();
+            tempStatus.setId(4);
+            Client tempClient = new Client();
+            tempClient.setId(5);
+            Order tempOrder = IOrderService.getOrderById(id);
+            tempOrder.setDateStart(new Timestamp(System.currentTimeMillis()).toString());
+            tempOrder.setDateEnd(new Timestamp(System.currentTimeMillis()+60*30).toString());
+            tempOrder.setEntytiStatus(tempStatus);
+            tempOrder.setEntityDriver(tempDriver);
+//            Order order = new Order(
+//                    id,
+//                    tempClient,
+//                    null,
+//                    null,
+//                    null,
+//                    0,
+//                    tempDriver,
+//                    new Timestamp(System.currentTimeMillis()).toString(),
+//                    new Timestamp(System.currentTimeMillis()+60*30).toString(),
+//                    tempStatus
+//            );
             try {
-                if (IOrderService.updateOrderOfDriver(order)) {
+                if (IOrderService.updateOrderOfDriver(tempOrder)) {
                     logger.trace("Update successful");
                     modelAndView.setViewName("redirect:/driver/list_new_order");
                 }else{

@@ -1,5 +1,7 @@
 package ru.svetozarov.models.entity;
 
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -16,10 +18,9 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private int idClient;
 
     @ManyToOne(fetch = FetchType.EAGER )
-    @JoinColumn(name = "id_client", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "id_client", referencedColumnName = "id")
     private ClientEntity entityClient;
 
 
@@ -31,18 +32,19 @@ public class OrderEntity {
     private String punktB;
     @Column(name = "price")
     private int price;
-    private int idDriver;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER )
-    @JoinColumn(name = "id_driver", referencedColumnName = "id")
+
+
+    @ManyToOne( fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_driver", referencedColumnName = "id", nullable=true)
     @NotFound(action = NotFoundAction.IGNORE)
-    private DriverEntity entityDriver = new DriverEntity();
+    private DriverEntity entityDriver ;
     @Column(name = "start_date")
     private String dateStart;
     @Column(name = "end_date")
     private String dateEnd;
 
-    private int idStatus;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_status", referencedColumnName = "id")
     private StatusOrderEntity entytiStatus;
@@ -84,13 +86,7 @@ public class OrderEntity {
         this.id = id;
     }
 
-    public int getIdClient() {
-        return idClient;
-    }
 
-    public void setIdClient(int idClient) {
-        this.idClient = idClient;
-    }
 
     public String getPunktA() {
         return punktA;
@@ -140,19 +136,5 @@ public class OrderEntity {
         this.dateEnd = dateEnd;
     }
 
-    public int getIdDriver() {
-        return idDriver;
-    }
 
-    public void setIdDriver(int idDriver) {
-        this.idDriver = idDriver;
-    }
-
-    public int getIdStatus() {
-        return idStatus;
-    }
-
-    public void setIdStatus(int idStatus) {
-        this.idStatus = idStatus;
-    }
 }
